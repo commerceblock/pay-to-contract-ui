@@ -58,7 +58,7 @@ export default {
     return {
       publicKey: '',
       paymentBase: '',
-      resultReady: true,
+      resultReady: false,
       fileSignatures: []
     }
   },
@@ -77,7 +77,8 @@ export default {
       console.log(this.publicKey)
       console.log(this.fileSignatures)
 
-      this.paymentBase = 'foooo'
+      this.paymentBase = 'lalalalalalalalalalalalala'
+      this.resultReady = true
     },
     fileAdded: function (file) {
       const that = this
