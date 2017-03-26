@@ -22,12 +22,12 @@
       </div>
 
       <div class='row text-center' v-if='resultReady'>
-        <div class='col-md-6 col-md-offset-3'>
+        <div class='col-md-12'>
           <div class='info-box bg-aqua'>
             <span class='info-box-icon'><i class='ion-ios-chatbubble-outline'></i></span>
             <div class='info-box-content'>
               <span class='info-box-text'>Payment Base</span>
-              <span class='info-box-number'>{{ paymentBase }}</span>
+              <span class='info-box-text'>{{ paymentBase }}</span>
             </div>
           </div>
         </div>
@@ -39,7 +39,20 @@
 
 <script>
 import Dropzone from 'vue2-dropzone'
+import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
 import crypto from 'crypto'
+import contract from 'pay-to-contract-lib/lib/contract'
+
+// workaround to https://github.com/bitpay/bitcore-lib/issues/34
+if (!crypto._createHash) {
+  crypto._createHash = crypto.createHash
+  crypto.createHash = function createHash (alg) {
+    if (alg === 'ripemd160') {
+      alg = 'rmd160'
+    }
+    return crypto._createHash(alg)
+  }
+}
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -74,10 +87,12 @@ export default {
       // now we have access to the native event
       if (event) event.preventDefault()
 
-      console.log(this.publicKey)
-      console.log(this.fileSignatures)
+      const hdPublicKey = HDPublicKey.fromString(this.publicKey)
+      const concatenatedSignatures = this.fileSignatures.sort().join()
+      const contractSignatureHash = contract.signAndHashContract(hdPublicKey.publicKey, concatenatedSignatures)
+      const paymentBase = contract.generateChildPublicKey(hdPublicKey, contractSignatureHash)
 
-      this.paymentBase = 'lalalalalalalalalalalalala'
+      this.paymentBase = paymentBase.toString()
       this.resultReady = true
     },
     fileAdded: function (file) {
@@ -91,15 +106,12 @@ export default {
         that.fileSignatures[file.name] = {
           status: 'loaded'
         }
-
         hash.update(e.target.result, 'utf8')
         const signature = hash.digest('hex')
         that.fileSignatures[file.name] = {
           status: 'digested',
           signature: signature
         }
-
-        console.log(that.fileSignatures)
       }
       // this.fileSignatures = event
       fileReader.readAsText(file)
@@ -109,11 +121,6 @@ export default {
     }
   }
 }
-
-// Dropzone.options.mainDropzone.accept = function (file, done) {
-//   console.log('fooooo', file)
-//   done()
-// }
 </script>
 
 <style scoped>
