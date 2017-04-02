@@ -58,7 +58,6 @@ export default {
         this.erroResponse = 'Seed is empty!'
         return
       }
-      
       if (!Mnemonic.isValid(this.privateKeySeed.trim())) {
         this.erroResponse = 'Invalid seed, seed must be either 12 or 24 words.'
         return
