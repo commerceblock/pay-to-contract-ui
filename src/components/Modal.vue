@@ -1,37 +1,55 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
+<transition name="modal">
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container">
 
-          <form class="ui form loginForm" @submit.prevent="validateKey">
+        <form class="ui form loginForm" @submit.prevent="validateKey">
 
-            <h2 class="text-center">Login</h2>
+          <h2 class="text-center">Login</h2>
 
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-              <input class="form-control" name="privatekey" placeholder="Enter your private key" type="text" v-model="privatekey">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+            <input class="form-control" name="privatekey" placeholder="Enter your private key" type="text" v-model="privatekey">
+          </div>
+
+          <div class="input-group">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-primary active">
+                <input type="radio" v-model="network">Mainet
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" v-model="network">Testnet
+              </label>
             </div>
+          </div>
 
-
-
-            <div class="text-center">
-              <button class="button-center" type="submit" @click='login'>Sign in</button>
-            </div>
-          </form>
-        </div>
+          <div class="text-center">
+            <button class="button-center" type="submit" @click='login'>Sign in</button>
+          </div>
+        </form>
       </div>
     </div>
-  </transition>
+  </div>
+</transition>
 </template>
 
 <script>
 export default {
   name: 'Modal',
+  data: function () {
+    return {
+      network: 'livenet'
+    }
+  },
   methods: {
     login: function (event) {
+      console.log(this.privatekey)
+      console.log(this.network)
+
       // TODO:: add validation
       this.$parent.$store.commit('SET_PRIVATE_KEY', this.privatekey)
+      this.$parent.$store.commit('SET_NETWORK_TYPE', this.network)
       this.$emit('close')
     },
     validateKey: function () {
