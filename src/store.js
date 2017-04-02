@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Mnemonic from 'bitcore-mnemonic'
 import bitcore from 'bitcore-lib'
 
 Vue.use(Vuex)
@@ -31,21 +30,16 @@ const mutations = {
   SET_TOKEN (state, token) {
     state.token = token
   },
-  SET_PRIVATE_KEY_SEED (state, privateKeySeed) {
-    console.log(Mnemonic)
-
-    state.privateKey = bitcore.HDPrivateKey.fromSeed(privateKeySeed)
-    console.log(state.privateKey)
-  },
   SET_NETWORK_TYPE (state, network) {
     state.network = network
-    console.log(bitcore.Networks)
-    console.log(network)
-
     state.network = network
+
     bitcore.Networks.defaultNetwork = bitcore.Networks[network]
 
     console.log('Default Network:' + bitcore.Networks.defaultNetwork)
+  },
+  SET_PRIVATE_KEY (state, privateKey) {
+    state.privateKey = privateKey
   }
 }
 

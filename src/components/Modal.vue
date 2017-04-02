@@ -4,13 +4,15 @@
     <div class="modal-wrapper">
       <div class="modal-container">
 
-        <form class="ui form loginForm" @submit.prevent="validateKey">
+        <div v-if=erroResponse class="text-red"><p>{{erroResponse}}</p></div>
+
+        <form class="ui form loginForm" @submit.prevent="login">
 
           <h2 class="text-center">Login</h2>
 
           <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-            <input class="form-control" name="privatekey" placeholder="Enter your private key" type="text" v-model="privatekey">
+            <input class="form-control" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="text" v-model="privateKeySeed">
           </div>
 
           <div class="input-group">
@@ -25,7 +27,7 @@
           </div>
 
           <div class="text-center">
-            <button class="button-center" type="submit" @click='login'>Sign in</button>
+            <button class="button-center" type="submit">Sign in</button>
           </div>
         </form>
       </div>
@@ -35,24 +37,41 @@
 </template>
 
 <script>
+import Mnemonic from 'bitcore-mnemonic'
+import _ from 'lodash'
+
 export default {
   name: 'Modal',
   data: function () {
     return {
-      network: 'livenet'
+      network: 'livenet',
+      privateKeySeed: '',
+      erroResponse: ''
     }
   },
   methods: {
     login: function (event) {
-      // TODO:: add validation
-      this.$parent.$store.commit('SET_PRIVATE_KEY_SEED', this.privatekeySeed)
-      this.$parent.$store.commit('SET_NETWORK_TYPE', this.network)
+      this.erroResponse = ''
 
-      window.localStorage.setItem('privatekeySeed', this.privatekeySeed)
+      // validate key
+      if (_.isNull(this.privateKeySeed) || _.isEmpty(this.privateKeySeed.trim())) {
+        this.erroResponse = 'Seed is empty!'
+        return
+      }
+
+      if (!Mnemonic.isValid(this.privateKeySeed.trim())) {
+        this.erroResponse = 'Invalid seed, seed must be either 12 or 24 words.'
+        return
+      }
+
+      const code = new Mnemonic(this.privateKeySeed.trim())
+      const privateKey = code.toHDPrivateKey()
+
+      this.$parent.$store.commit('SET_NETWORK_TYPE', this.network)
+      this.$parent.$store.commit('SET_PRIVATE_KEY', privateKey)
+
+      window.localStorage.setItem('privateKeySeed', this.privateKeySeed)
       this.$emit('close')
-    },
-    validateKey: function () {
-      // key must be BIP 32 compliant
     }
   }
 }
