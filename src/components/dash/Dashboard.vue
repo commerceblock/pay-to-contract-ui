@@ -32,7 +32,6 @@
 
 <script>
 import contract from 'pay-to-contract-lib/lib/contract'
-import HDPrivateKey from 'bitcore-lib/lib/hdprivatekey'
 import Dropzone from 'vue2-dropzone'
 import crypto from 'crypto'
 
@@ -79,12 +78,10 @@ export default {
       // now we have access to the native event
       if (event) event.preventDefault()
 
-      const hdPrivateKey = HDPrivateKey.fromString(this.$parent.store.getters.privateKey)
-      const hdPublicKey = hdPrivateKey.hdPublicKey
+      const hdPublicKey = this.$parent.store.getters.privateKey.hdPublicKey
       const concatenatedSignatures = this.fileSignatures.sort().join()
-      const contractSignatureHash = contract.signAndHashContract(hdPrivateKey.hdPublicKey.publicKey, concatenatedSignatures)
+      const contractSignatureHash = contract.signAndHashContract(hdPublicKey.publicKey, concatenatedSignatures)
       const paymentBase = contract.generateChildPublicKey(hdPublicKey, contractSignatureHash)
-
       this.paymentBase = paymentBase.toString()
       this.resultReady = true
     },
