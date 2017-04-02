@@ -12,7 +12,7 @@
 
           <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-            <input class="form-control" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="text" v-model="privateKeySeed">
+            <textarea class="form-control span6" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
           </div>
 
           <div class="input-group">
@@ -58,7 +58,7 @@ export default {
         this.erroResponse = 'Seed is empty!'
         return
       }
-
+      
       if (!Mnemonic.isValid(this.privateKeySeed.trim())) {
         this.erroResponse = 'Invalid seed, seed must be either 12 or 24 words.'
         return
@@ -78,6 +78,10 @@ export default {
 </script>
 
 <style>
+textarea {
+    resize: none;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -96,7 +100,7 @@ export default {
 }
 
 .modal-container {
-  width: 1100px;
+  width: 650px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
