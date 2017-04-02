@@ -46,7 +46,10 @@ module.exports = function (config) {
     browsers: ['PhantomJS'],
     frameworks: ['jasmine'],
     reporters: ['spec', 'coverage'],
-    files: ['./index.js'],
+    files: [
+      '../../node_modules/babel-polyfill/dist/polyfill.js',
+      './index.js'
+    ],
     preprocessors: {
       './index.js': ['webpack', 'sourcemap']
     },
