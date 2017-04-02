@@ -28,6 +28,9 @@ const mutations = {
   },
   SET_TOKEN (state, token) {
     state.token = token
+  },
+  SET_PRIVATE_KEY (state, privateKey) {
+    state.privateKey = privateKey
   }
 }
 

@@ -1,5 +1,11 @@
 <template>
+
   <div class="wrapper">
+
+    <modal v-if="showModal" @close="showModal = false">
+
+    </modal>
+
     <header class="main-header">
       <a href="/" class="logo">
         <!-- mini logo for sidebar mini 40x50 pixels -->
@@ -72,11 +78,13 @@
 </template>
 
 <script>
-import faker from 'faker'
-require('hideseek')
+import Modal from './Modal.vue'
 
-module.exports = {
+export default {
   name: 'Dash',
+  components: {
+    Modal
+  },
   data: function () {
     return {
       section: 'Dash',
@@ -87,7 +95,8 @@ module.exports = {
           url: '', // Back end server
           result: []
         }
-      }
+      },
+      showModal: true
     }
   },
   computed: {
@@ -99,14 +108,6 @@ module.exports = {
     },
     callAPI: function () {
       return this.$parent.callAPI
-    },
-    demo: function () {
-      return {
-        displayName: faker.name.findName(),
-        avatar: faker.image.avatar(),
-        email: faker.internet.email(),
-        randomCard: faker.helpers.createCard()
-      }
     },
     year: function () {
       var y = new Date()
