@@ -12,7 +12,7 @@
         <span class="logo-mini"><img src="/static/img/logo_sm.png" alt="Logo" class="img-responsive center-block"></span>
         <!-- logo for regular state and mobile devices -->
         <div class="container logo-lg">
-          <div class="pull-left info">Pay to Contract</div>
+          <div class="pull-left info">CommerceBlock</div>
         </div>
       </a>
 

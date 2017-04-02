@@ -8,13 +8,6 @@
       </div>
 
       <div class='row form-group'>
-        <div class='input-group'>
-          <span class='input-group-addon'>$</span>
-          <input placeholder='public key' type='text' class='form-control' id='publicKey' name='publicKey' v-model='publicKey'>
-        </div>
-      </div>
-
-      <div class='row form-group'>
         <div class='text-center'>
             <button class='btn btn-primary btn-lg' v-on:click='generate($event)'>Generate</button>
             <button class='btn btn-primary btn-lg' v-on:click='reset($event)'>Reset</button>
@@ -38,10 +31,10 @@
 </template>
 
 <script>
-import Dropzone from 'vue2-dropzone'
-import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
-import crypto from 'crypto'
 import contract from 'pay-to-contract-lib/lib/contract'
+import HDPrivateKey from 'bitcore-lib/lib/hdprivatekey'
+import Dropzone from 'vue2-dropzone'
+import crypto from 'crypto'
 
 // workaround to https://github.com/bitpay/bitcore-lib/issues/34
 if (!crypto._createHash) {
@@ -78,7 +71,6 @@ export default {
   methods: {
     reset: function (event) {
       this.resultReady = false
-      this.publicKey = ''
       this.fileSignatures = []
       this.paymentBase = ''
       //  TODO:: clear dropzone
@@ -87,9 +79,10 @@ export default {
       // now we have access to the native event
       if (event) event.preventDefault()
 
-      const hdPublicKey = HDPublicKey.fromString(this.publicKey)
+      const hdPrivateKey = HDPrivateKey.fromString(this.$parent.store.getters.privateKey)
+      const hdPublicKey = hdPrivateKey.hdPublicKey
       const concatenatedSignatures = this.fileSignatures.sort().join()
-      const contractSignatureHash = contract.signAndHashContract(hdPublicKey.publicKey, concatenatedSignatures)
+      const contractSignatureHash = contract.signAndHashContract(hdPrivateKey.hdPublicKey.publicKey, concatenatedSignatures)
       const paymentBase = contract.generateChildPublicKey(hdPublicKey, contractSignatureHash)
 
       this.paymentBase = paymentBase.toString()

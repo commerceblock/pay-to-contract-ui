@@ -44,12 +44,11 @@ export default {
   },
   methods: {
     login: function (event) {
-      console.log(this.privatekey)
-      console.log(this.network)
-
       // TODO:: add validation
-      this.$parent.$store.commit('SET_PRIVATE_KEY', this.privatekey)
+      this.$parent.$store.commit('SET_PRIVATE_KEY_SEED', this.privatekeySeed)
       this.$parent.$store.commit('SET_NETWORK_TYPE', this.network)
+
+      window.localStorage.setItem('privatekeySeed', this.privatekeySeed)
       this.$emit('close')
     },
     validateKey: function () {

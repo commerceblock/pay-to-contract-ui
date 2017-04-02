@@ -43,7 +43,7 @@ new Vue({
 
 // Check local storage to handle refreshes
 if (window.localStorage) {
-  // if (store.state.user !== window.localStorage.getItem('privateKey')) {
-  //   store.commit('SET_PRIVATE_KEY', JSON.parse(window.localStorage.getItem('privateKey')))
-  // }
+  if (store.state.user !== window.localStorage.getItem('privatekeySeed')) {
+    store.commit('SET_PRIVATE_KEY_SEED', window.localStorage.getItem('privatekeySeed'))
+  }
 }
