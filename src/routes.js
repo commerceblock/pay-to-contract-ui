@@ -1,5 +1,4 @@
 import DashView from './components/Dash.vue'
-import LoginView from './components/Login.vue'
 import NotFoundView from './components/404.vue'
 
 // Import Views - Dash
@@ -9,9 +8,6 @@ import TablesView from './components/dash/Tables.vue'
 // Routes
 const routes = [
   {
-    path: '/login',
-    component: LoginView
-  }, {
     path: '/',
     component: DashView,
     auth: true,

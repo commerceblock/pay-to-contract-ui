@@ -144,4 +144,12 @@ textarea {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+.loginForm .input-group {
+  padding-bottom: 1em;
+  height: 4em;
+}
+.input-group input {
+  height: 4em;
+}
 </style>
