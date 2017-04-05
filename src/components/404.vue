@@ -19,4 +19,15 @@
 </script>
 
 <style>
+html, body, .container-table {
+  height: 100%;
+  background-color: #282B30 !important;
+}
+.container-table {
+    display: table;
+    color: white;
+}
+.vertical-10p {
+  padding-top: 10%;
+}
 </style>

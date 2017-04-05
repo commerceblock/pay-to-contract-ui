@@ -3,7 +3,6 @@
   <div class="wrapper">
 
     <modal v-if="showModal" @close="showModal = false">
-
     </modal>
 
     <header class="main-header">
@@ -47,8 +46,8 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
           <li class="header">TOOLS</li>
-          <li class="active pageLink" v-on:click="toggleMenu"><router-link to="/"><i class="fa fa-desktop"></i><span class="page">Contract Form</span></router-link></li>
-          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/tables"><i class="fa fa-table"></i><span class="page">Sign Contract</span></router-link></li>
+          <li class="active pageLink" v-on:click="toggleMenu"><router-link to="/"><i class="fa fa-paperclip"></i><span class="page">Forms</span></router-link></li>
+          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/contracts"><i class="fa fa-file-text-o"></i><span class="page">Contracts</span></router-link></li>
         </ul>
         <!-- /.sidebar-menu -->
       </section>
@@ -81,13 +80,13 @@
 import Modal from './Modal.vue'
 
 export default {
-  name: 'Dash',
+  name: 'Home',
   components: {
     Modal
   },
   data: function () {
     return {
-      section: 'Dash',
+      section: 'Home',
       me: '',
       error: '',
       api: {

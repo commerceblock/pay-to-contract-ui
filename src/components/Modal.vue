@@ -12,7 +12,7 @@
 
           <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-            <textarea class="form-control span6" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
+            <textarea class="form-control span6 prvKey" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
           </div>
 
           <div class="input-group">
@@ -79,8 +79,8 @@ export default {
 </script>
 
 <style>
-textarea {
-    resize: none;
+.prvKey {
+  resize: none;
 }
 
 .modal-mask {
