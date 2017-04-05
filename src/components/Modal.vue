@@ -16,19 +16,17 @@
           </div>
 
           <div class="input-group">
-            <div class="btn-group" data-toggle="buttons">
-              <label class="btn btn-primary active">
-                <input type="radio" v-model="network">Mainet
-              </label>
-              <label class="btn btn-primary">
-                <input type="radio" v-model="network">Testnet
+            <div class="text-center">
+              <label>
+                <bootstrap-toggle v-model="isMainet" :options="{ on: 'Mainet', off: 'Testnet' }"/>
               </label>
             </div>
           </div>
 
-          <div class="text-center">
-            <button class="button-center" type="submit">Sign in</button>
+          <div class="text-center col-md-4 col-sm-offset-4">
+            <button class="button-center btn btn-primary btn-lg" type="submit">Sign in</button>
           </div>
+
         </form>
       </div>
     </div>
@@ -37,14 +35,16 @@
 </template>
 
 <script>
+import BootstrapToggle from 'vue-bootstrap-toggle'
 import Mnemonic from 'bitcore-mnemonic'
 import _ from 'lodash'
 
 export default {
   name: 'Modal',
+  components: { BootstrapToggle },
   data: function () {
     return {
-      network: 'livenet',
+      isMainet: true,
       privateKeySeed: '',
       erroResponse: ''
     }
@@ -52,6 +52,8 @@ export default {
   methods: {
     login: function (event) {
       this.erroResponse = ''
+
+      const network = this.isMainet ? 'livenet' : 'testnet'
 
       // validate key
       if (_.isNull(this.privateKeySeed) || _.isEmpty(this.privateKeySeed.trim())) {
@@ -66,7 +68,7 @@ export default {
       const code = new Mnemonic(this.privateKeySeed.trim())
       const privateKey = code.toHDPrivateKey()
 
-      this.$parent.$store.commit('SET_NETWORK_TYPE', this.network)
+      this.$parent.$store.commit('SET_NETWORK_TYPE', network)
       this.$parent.$store.commit('SET_PRIVATE_KEY', privateKey)
 
       window.localStorage.setItem('privateKeySeed', this.privateKeySeed)
@@ -100,6 +102,7 @@ textarea {
 
 .modal-container {
   width: 650px;
+  height: 300px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
