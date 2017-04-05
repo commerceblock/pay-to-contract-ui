@@ -1,33 +1,31 @@
 <template>
-  <section class='content'>
-    <div id='app'>
+<section class='content'>
 
-      <div class='row form-group'>
-        <dropzone id='mainDropzone' url='/' v-on:vdropzone-file-added='fileAdded' v-on:vdropzone-removed-file='fileRemoved'>
-        </dropzone>
-      </div>
+  <div class='row form-group'>
+    <dropzone id='mainDropzone' url='/' v-on:vdropzone-file-added='fileAdded' v-on:vdropzone-removed-file='fileRemoved'>
+    </dropzone>
+  </div>
 
-      <div class='row form-group'>
-        <div class='text-center'>
-            <button class='btn btn-primary btn-lg' v-on:click='generate($event)'>Generate</button>
-            <button class='btn btn-primary btn-lg' v-on:click='reset($event)'>Reset</button>
-        </div>
-      </div>
-
-      <div class='row text-center' v-if='resultReady'>
-        <div class='col-md-12'>
-          <div class='info-box bg-aqua'>
-            <span class='info-box-icon'><i class='ion-ios-chatbubble-outline'></i></span>
-            <div class='info-box-content'>
-              <span class='info-box-text'>Payment Address</span>
-              <span class='info-box-text'>{{ paymentAddress }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+  <div class='row form-group'>
+    <div class='text-center'>
+      <button class='btn btn-primary btn-lg' v-on:click='generate($event)'>Generate</button>
+      <button class='btn btn-primary btn-lg' v-on:click='reset($event)'>Reset</button>
     </div>
-  </section>
+  </div>
+
+  <div class='row text-center' v-if='resultReady'>
+    <div class='col-md-12'>
+      <div class='info-box bg-aqua'>
+        <span class='info-box-icon'><i class='ion-ios-chatbubble-outline'></i></span>
+        <div class='info-box-content'>
+          <span class='info-box-text'>Payment Address</span>
+          <span class='info-box-text'>{{ paymentAddress }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
 </template>
 
 <script>
