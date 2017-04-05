@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Resource from 'vue-resource'
 import VueRouter from 'vue-router'
+import crypto from 'crypto'
 
 import routes from './routes'
 import store from './store'
@@ -46,4 +47,15 @@ if (window.localStorage) {
   // if (store.state.user !== window.localStorage.getItem('privateKeySeed')) {
   //   store.commit('SET_PRIVATE_KEY_SEED', window.localStorage.getItem('privateKeySeed'))
   // }
+}
+
+// workaround to https://github.com/bitpay/bitcore-lib/issues/34
+if (!crypto._createHash) {
+  crypto._createHash = crypto.createHash
+  crypto.createHash = function createHash (alg) {
+    if (alg === 'ripemd160') {
+      alg = 'rmd160'
+    }
+    return crypto._createHash(alg)
+  }
 }

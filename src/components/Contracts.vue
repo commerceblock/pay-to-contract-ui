@@ -33,17 +33,6 @@ import Dropzone from 'vue2-dropzone'
 import crypto from 'crypto'
 import contract from 'pay-to-contract-lib/lib/contract'
 
-// workaround to https://github.com/bitpay/bitcore-lib/issues/34
-if (!crypto._createHash) {
-  crypto._createHash = crypto.createHash
-  crypto.createHash = function createHash (alg) {
-    if (alg === 'ripemd160') {
-      alg = 'rmd160'
-    }
-    return crypto._createHash(alg)
-  }
-}
-
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
   required: false,
