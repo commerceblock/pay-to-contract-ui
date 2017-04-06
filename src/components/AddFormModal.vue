@@ -8,7 +8,7 @@
 
         <form class="ui form loginForm" @submit.prevent="login">
 
-          <h2 class="text-center">Login</h2>
+          <h2 class="text-center">Add Form</h2>
 
           <!-- <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 export default {
   name: 'AddFormModal',
   components: {

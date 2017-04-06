@@ -1,25 +1,53 @@
 <template>
 <section class='content'>
 
-  <div class='row form-group'>
-    <dropzone id='mainDropzone' url='/' v-on:vdropzone-file-added='fileAdded' v-on:vdropzone-removed-file='fileRemoved'>
-    </dropzone>
-  </div>
+  <addformmodal v-if="showAddFormModal" @close="showAddFormModal = false" />
 
-  <div class='row form-group'>
-    <div class='text-center'>
-      <button class='btn btn-primary btn-lg' v-on:click='generate($event)'>Generate</button>
-      <button class='btn btn-primary btn-lg' v-on:click='reset($event)'>Reset</button>
-    </div>
-  </div>
+  <div class="row center-block">
+    <h2>Saved Forms</h2>
+    <div class="col-md-12">
+      <div class="box">
+        <div class="box-header">
+            <!-- <h3 class="box-title">Striped Full Width Table</h3> -->
+          <button class='btn btn-primary' v-on:click='showAddFormModal = true'>Add <i class="fa fa-plus"></i></button>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
 
-  <div class='row text-center' v-if='resultReady'>
-    <div class='col-md-12'>
-      <div class='info-box bg-aqua'>
-        <span class='info-box-icon'><i class='ion-ios-chatbubble-outline'></i></span>
-        <div class='info-box-content'>
-          <span class='info-box-text'>Payment Base</span>
-          <span class='info-box-text'>{{ paymentBase }}</span>
+            <div class="row">
+              <div class="col-sm-12 table-responsive">
+                <table aria-describedby="example1_info" role="grid" id="example1" class="table table-bordered table-striped dataTable">
+                  <thead>
+                    <tr role="row">
+                      <th aria-label="Name: activate to sort column descending" aria-sort="ascending" style="width: 167px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting_asc">Name</th>
+                      <th aria-label="Date: activate to sort column ascending" style="width: 207px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting">Date</th>
+                      <th aria-label="Actions: activate to sort column ascending" style="width: 182px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in items" :class="index % 2 == 0 ? 'even' : 'odd'" role="row">
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.date }}</td>
+                      <td>
+                       <a><i class="fa fa-user"></i></a>
+                       <a><i class="fa fa-pencil"></i></a>
+                       <a><i class="fa fa-times"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th colspan="1" rowspan="1">Name</th>
+                      <th colspan="1" rowspan="1">Date</th>
+                      <th colspan="1" rowspan="1">Actions</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
         </div>
       </div>
     </div>
@@ -29,73 +57,38 @@
 </template>
 
 <script>
-import contract from 'pay-to-contract-lib/lib/contract'
-import Dropzone from 'vue2-dropzone'
-import crypto from 'crypto'
-
-Dropzone.props.autoProcessQueue = {
-  type: Boolean,
-  required: false,
-  default: function () {
-    return false
-  }
-}
+import AddFormModal from './AddFormModal.vue'
 
 export default {
   name: 'MainApp',
   components: {
-    Dropzone
+    addformmodal: AddFormModal
   },
   data: function () {
     return {
-      publicKey: '',
-      paymentBase: '',
-      resultReady: false,
-      fileSignatures: []
+      showAddFormModal: false,
+      fileSignatures: [],
+      items: [
+        {
+          name: 'Foo',
+          date: '1976'
+        },
+        {
+          name: 'Bar',
+          date: '1976'
+        },
+        {
+          name: 'Foo',
+          date: '1976'
+        },
+        {
+          name: 'Bar',
+          date: '1976'
+        }
+      ]
     }
   },
   methods: {
-    reset: function (event) {
-      this.resultReady = false
-      this.fileSignatures = []
-      this.paymentBase = ''
-      //  TODO:: clear dropzone
-    },
-    generate: function (event) {
-      // now we have access to the native event
-      if (event) event.preventDefault()
-
-      const hdPublicKey = this.$parent.store.getters.privateKey.hdPublicKey
-      const concatenatedSignatures = this.fileSignatures.sort().join()
-      const contractSignatureHash = contract.signAndHashContract(hdPublicKey.publicKey, concatenatedSignatures)
-      const paymentBase = contract.generateChildPublicKey(hdPublicKey, contractSignatureHash)
-      this.paymentBase = paymentBase.toString()
-      this.resultReady = true
-    },
-    fileAdded: function (file) {
-      const that = this
-      that.fileSignatures[file.name] = {
-        status: 'initial'
-      }
-      const fileReader = new window.FileReader()
-      const hash = crypto.createHash('sha512')
-      fileReader.onload = function (e) {
-        that.fileSignatures[file.name] = {
-          status: 'loaded'
-        }
-        hash.update(e.target.result, 'utf8')
-        const signature = hash.digest('hex')
-        that.fileSignatures[file.name] = {
-          status: 'digested',
-          signature: signature
-        }
-      }
-      // this.fileSignatures = event
-      fileReader.readAsText(file)
-    },
-    fileRemoved: function (file, error, xhr) {
-      delete this.fileSignatures[file.name]
-    }
   }
 }
 </script>
