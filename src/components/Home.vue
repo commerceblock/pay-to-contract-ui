@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import LoginModal from './Modal.vue'
+import LoginModal from './LoginModal.vue'
 
 export default {
   name: 'Home',
