@@ -2,8 +2,8 @@
 
   <div class="wrapper">
 
-    <modal v-if="showModal" @close="showModal = false">
-    </modal>
+    <loginmodal v-if="showModal" @close="showModal = false">
+    </loginmodal>
 
     <header class="main-header">
       <a href="/" class="logo">
@@ -77,12 +77,12 @@
 </template>
 
 <script>
-import Modal from './Modal.vue'
+import LoginModal from './Modal.vue'
 
 export default {
   name: 'Home',
   components: {
-    Modal
+    'loginmodal': LoginModal
   },
   data: function () {
     return {
