@@ -1,5 +1,5 @@
 <template>
-<transition name="modal">
+<transition name="loginmodal">
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container">
@@ -40,7 +40,7 @@ import Mnemonic from 'bitcore-mnemonic'
 import _ from 'lodash'
 
 export default {
-  name: 'Modal',
+  name: 'LoginModal',
   components: { BootstrapToggle },
   data: function () {
     return {

@@ -2,7 +2,7 @@
 
   <div class="wrapper">
 
-    <loginmodal v-if="showModal" @close="showModal = false">
+    <loginmodal v-if="showLoginModal" @close="showLoginModal = false">
     </loginmodal>
 
     <header class="main-header">
@@ -95,7 +95,7 @@ export default {
           result: []
         }
       },
-      showModal: true
+      showLoginModal: true
     }
   },
   computed: {
