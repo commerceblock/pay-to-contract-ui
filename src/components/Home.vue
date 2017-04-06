@@ -2,8 +2,7 @@
 
   <div class="wrapper">
 
-    <loginmodal v-if="showLoginModal" @close="showLoginModal = false">
-    </loginmodal>
+    <loginmodal v-if="showLoginModal" @close="showLoginModal = false" />
 
     <header class="main-header">
       <a href="/" class="logo">
@@ -82,7 +81,7 @@ import LoginModal from './LoginModal.vue'
 export default {
   name: 'Home',
   components: {
-    'loginmodal': LoginModal
+    loginmodal: LoginModal
   },
   data: function () {
     return {
