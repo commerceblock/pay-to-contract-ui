@@ -66,29 +66,18 @@ export default {
   },
   data: function () {
     return {
-      showAddFormModal: false,
-      fileSignatures: [],
-      items: [
-        {
-          name: 'Foo',
-          date: '1976'
-        },
-        {
-          name: 'Bar',
-          date: '1976'
-        },
-        {
-          name: 'Foo',
-          date: '1976'
-        },
-        {
-          name: 'Bar',
-          date: '1976'
-        }
-      ]
+      showAddFormModal: false
     }
   },
   methods: {
+  },
+  computed: {
+    store: function () {
+      return this.$parent.$store
+    },
+    items: function () {
+      return this.store.getters.items
+    }
   }
 }
 </script>

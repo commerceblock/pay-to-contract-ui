@@ -1,33 +1,39 @@
 <template>
 <transition name="modal">
-  <div class="modal-mask">
-    <div class="modal-wrapper">
-      <div class="modal-container">
+  <div class="add-form-modal-mask">
+    <div class="add-form-modal-wrapper">
+      <div class="add-form-modal-container">
 
         <div v-if=erroResponse class="text-red"><p>{{erroResponse}}</p></div>
 
-        <form class="ui form loginForm" @submit.prevent="login">
+        <div class="ui form loginForm">
 
           <h2 class="text-center">Add Form</h2>
 
-          <!-- <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-            <textarea class="form-control span6 prvKey" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
+          <div class="input-group">
+            <label>Name</label>
+            <input class="form-control span6" name="formName" placeholder="Enter form name" type="textarea" v-model="formName" />
           </div>
 
           <div class="input-group">
-            <div class="text-center">
-              <label>
-                <bootstrap-toggle v-model="isMainet" :options="{ on: 'Mainet', off: 'Testnet' }"/>
-              </label>
+            <div class="form-group">
+              <label>Upload your files</label>
+              <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" />
             </div>
           </div>
 
-          <div class="text-center col-md-4 col-sm-offset-4">
-            <button class="button-center btn btn-primary btn-lg" type="submit">Sign in</button>
-          </div> -->
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
 
-        </form>
+          <div class="text-center col-md-3 col-sm-offset-4 add-form-button">
+            <button class="button-center btn btn-primary btn-lg add-form-button" @click="addForm">&nbsp;Add&nbsp;&nbsp;&nbsp;</button>
+          </div>
+
+          <div class="text-center col-md-3 col-sm-offset-1 add-form-button">
+            <button class="button-center btn btn-primary btn-lg add-form-button" @click="$emit('close')">Cancel</button>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -35,25 +41,61 @@
 </template>
 
 <script>
+import Dropzone from 'vue2-dropzone'
+
+Dropzone.props.autoProcessQueue = {
+  type: Boolean,
+  required: false,
+  default: function () {
+    return false
+  }
+}
+
 export default {
   name: 'AddFormModal',
   components: {
-
+    Dropzone
   },
   data: function () {
     return {
     }
   },
   methods: {
-    login: function (event) {
+    addForm: function (event) {
+      this.$parent.$store.commit('ADD_ITEM', {
+        name: this.formName,
+        date: new Date().toString()
+      })
       this.$emit('close')
+    },
+    fileAdded: function (event) {
+
+    },
+    fileRemoved: function (event) {
+
+    }
+  },
+  computed: {
+    store: function () {
+      return this.$parent.$store
+    },
+    items: function () {
+      return this.store.getters.items
     }
   }
 }
 </script>
 
-<style>
-.modal-mask {
+
+<style scoped>
+@import url('~dropzone/dist/dropzone.css');
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
+.add-form-button {
+  width: 90px
+}
+
+.add-form-modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -65,14 +107,14 @@ export default {
   transition: opacity .3s ease;
 }
 
-.modal-wrapper {
+.add-form-modal-wrapper {
   display: table-cell;
   vertical-align: middle;
 }
 
-.modal-container {
+.add-form-modal-container {
   width: 650px;
-  height: 300px;
+  height: 650px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -82,12 +124,12 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.modal-header h3 {
+.add-form-modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
 
-.modal-body {
+.add-form-modal-body {
   margin: 20px 0;
 }
 
@@ -101,16 +143,16 @@ export default {
  * these styles.
  */
 
-.modal-enter {
+.add-form-modal-enter {
   opacity: 0;
 }
 
-.modal-leave-active {
+.add-form-modal-leave-active {
   opacity: 0;
 }
 
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
+.add-form-modal-enter .add-form-modal-container,
+.add-form-modal-leave-active .add-form-modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
@@ -122,5 +164,10 @@ export default {
 
 .input-group input {
   height: 4em;
+}
+
+.vue-dropzone {
+  width: 600px;
+  height: 300px;
 }
 </style>

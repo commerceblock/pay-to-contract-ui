@@ -10,11 +10,8 @@ const state = {
   serverURI: 'http://10.110.1.136:8080',
   privateKey: null,
   network: null,
-  userInfo: {
-    messages: [{1: 'test', 2: 'test'}],
-    notifications: [],
-    tasks: []
-  }
+  items: [
+  ]
 }
 
 const mutations = {
@@ -40,11 +37,15 @@ const mutations = {
   },
   SET_PRIVATE_KEY (state, privateKey) {
     state.privateKey = privateKey
+  },
+  ADD_ITEM (state, item) {
+    state.items.push(item)
   }
 }
 
 const getters = {
-  privateKey: (state) => state.privateKey
+  privateKey: (state) => state.privateKey,
+  items: (state) => state.items
 }
 
 export default new Vuex.Store({
