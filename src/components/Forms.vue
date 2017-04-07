@@ -20,6 +20,7 @@
                 <table aria-describedby="example1_info" role="grid" id="example1" class="table table-bordered table-striped dataTable">
                   <thead>
                     <tr role="row">
+                      <th aria-label="#: activate to sort column descending" aria-sort="ascending" style="width: 167px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting_asc">#</th>
                       <th aria-label="Name: activate to sort column descending" aria-sort="ascending" style="width: 167px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting_asc">Name</th>
                       <th aria-label="Date: activate to sort column ascending" style="width: 207px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting">Date</th>
                       <th aria-label="Actions: activate to sort column ascending" style="width: 182px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting">Actions</th>
@@ -27,6 +28,7 @@
                   </thead>
                   <tbody>
                     <tr v-for="(item, index) in items" :class="index % 2 == 0 ? 'even' : 'odd'" role="row">
+                      <td>{{ index+1 }}.</td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.date }}</td>
                       <td>
