@@ -1,6 +1,8 @@
 <template>
 <section class='content'>
 
+  <invoice-request v-if="showInvoiceRequest" @close="closeInvoiceRequestModal" />
+
   <div class="row center-block">
     <h2>Fill in information</h2>
 
@@ -41,6 +43,7 @@ import Dropzone from 'vue2-dropzone'
 import crypto from 'crypto'
 import _ from 'lodash'
 import randomNumber from 'random-number-csprng'
+import InvoiceRequestModal from './InvoiceRequestModal.vue'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -53,13 +56,15 @@ Dropzone.props.autoProcessQueue = {
 export default {
   name: 'MainApp',
   components: {
-    Dropzone
+    Dropzone,
+    'invoice-request': InvoiceRequestModal
   },
   data: function () {
     const data = {
       paymentId: null,
       contractHash: null,
-      fileHashes: []
+      fileHashes: [],
+      showInvoiceRequest: false
     }
     const randomId = randomNumber(1000000, 5000000)
     randomId
@@ -69,6 +74,11 @@ export default {
   },
   methods: {
     generate: function () {
+      this.$parent.store.commit('SET_INVOICE_REQUEST_DATA', {
+        paymentId: this.paymentId,
+        contractHash: this.contractHash
+      })
+      this.showInvoiceRequest = true
     },
     fileAdded: function (file) {
       const that = this
@@ -108,6 +118,9 @@ export default {
         hash.update(combinedHashes, 'utf8')
         this.contractHash = hash.digest('hex')
       }
+    },
+    closeInvoiceRequestModal: function () {
+      this.showInvoiceRequest = false
     }
   }
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import bitcore from 'bitcore-lib'
-import _ from 'lodash'
+import contract from 'pay-to-contract-lib/lib/contract'
 
 Vue.use(Vuex)
 
@@ -11,8 +11,7 @@ const state = {
   serverURI: 'http://10.110.1.136:8080',
   privateKey: null,
   network: null,
-  items: [
-  ]
+  invoiceRequestData: null
 }
 
 const mutations = {
@@ -22,12 +21,6 @@ const mutations = {
   TOGGLE_SEARCHING (state) {
     state.searching = (state.searching === '') ? 'loading' : ''
   },
-  SET_USER (state, user) {
-    state.user = user
-  },
-  SET_TOKEN (state, token) {
-    state.token = token
-  },
   SET_NETWORK_TYPE (state, network) {
     state.network = network
     bitcore.Networks.defaultNetwork = bitcore.Networks[network]
@@ -36,25 +29,25 @@ const mutations = {
   SET_PRIVATE_KEY (state, privateKey) {
     state.privateKey = privateKey
   },
-  ADD_ITEM (state, item) {
-    console.log('Add item')
-    console.log(item)
-    state.items.push(item)
-  },
-  DELETE_ITEM (state, id) {
-    console.log('Remove id')
-    console.log(id)
-    const index = _.findIndex(state.items, {id})
-    if (index > -1) {
-      state.items.splice(index, 1)
+  SET_INVOICE_REQUEST_DATA (state, data) {
+    if (data) {
+      data.paymentIdentityPublicKey = state.privateKey
+        .derive(data.paymentId)
+        .hdPublicKey
+        .toString()
+      const paymentBasePath = contract.derivePath(data.contractHash)
+      data.paymentBasePublicKey = state.privateKey
+        .derive(paymentBasePath)
+        .hdPublicKey
+        .toString()
     }
+    state.invoiceRequestData = data
   }
 }
 
 const getters = {
   privateKey: (state) => state.privateKey,
-  items: (state) => state.items,
-  itemById: (state, id) => _.find(state.items, {id})
+  invoiceRequestData: (state) => state.invoiceRequestData
 }
 
 export default new Vuex.Store({

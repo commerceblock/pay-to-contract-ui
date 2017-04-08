@@ -1,9 +1,38 @@
 <template>
-<transition name="modal" id="invoice-request-modal-template">
+<transition name="modal">
   <div class="invoice-request-modal-mask">
-    <div class="invoice-request-modal-wrapper">
-      <div class="invoice-request-modal-container">
-          <h1>{{ message }}</h1>
+    <div class="invoice-request-modal-wrapper modal">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content invoice-request-modal-container">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
+            <h4 class="modal-title">Invoice Request</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Payment Id</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="paymentId" />
+            </div>
+            <div class="form-group">
+              <label>Contract Hash</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
+            </div>
+            <div class="form-group">
+              <label>Payment Identity</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
+            </div>
+            <div class="form-group">
+              <label>Payment Base</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
+              <!-- <qrcode val="ddddd" /> -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="close">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -11,18 +40,41 @@
 </template>
 
 <script>
+import Qrcode from 'vue-qrcode'
+
 export default {
   name: 'InvoiceRequestModal',
   components: {
+    Qrcode
   },
   data: function () {
-    return {
-      message: null
-    }
+    return {}
   },
   methods: {
+    close: function () {
+      this.$emit('close')
+      this.store.commit('SET_INVOICE_REQUEST_DATA', null)
+    }
   },
   computed: {
+    store: function () {
+      return this.$parent.$store
+    },
+    invoiceRequestData: function () {
+      return this.store.getters.invoiceRequestData
+    },
+    paymentId: function () {
+      return this.invoiceRequestData.paymentId
+    },
+    contractHash: function () {
+      return this.invoiceRequestData.contractHash
+    },
+    paymentIdentityPublicKey: function () {
+      return this.invoiceRequestData.paymentIdentityPublicKey
+    },
+    paymentBasePublicKey: function () {
+      return this.invoiceRequestData.paymentBasePublicKey
+    }
   }
 }
 </script>
@@ -52,13 +104,9 @@ export default {
 }
 
 .invoice-request-modal-container {
-  width: 650px;
-  height: 650px;
+  width: 750px;
+  height: 750px;
   margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -71,6 +119,7 @@ export default {
 .invoice-request-modal-body {
   margin: 20px 0;
 }
+
 
 
 /*
