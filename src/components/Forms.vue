@@ -32,19 +32,12 @@
                       <td>{{ item.name }}</td>
                       <td>{{ item.date }}</td>
                       <td>
-                       <a><i class="fa fa-user"></i></a>
-                       <a><i class="fa fa-pencil"></i></a>
-                       <a><i class="fa fa-times"></i></a>
+                       <a @click='viewItem(item.id)'><i class="fa fa-user"></i></a>
+                       <a @click='shareItem(item.id)'><i class="fa fa-pencil"></i></a>
+                       <a @click='deleteItem(item.id)'><i class="fa fa-times"></i></a>
                       </td>
                     </tr>
                   </tbody>
-                  <tfoot>
-                    <tr>
-                      <th colspan="1" rowspan="1">Name</th>
-                      <th colspan="1" rowspan="1">Date</th>
-                      <th colspan="1" rowspan="1">Actions</th>
-                    </tr>
-                  </tfoot>
                 </table>
               </div>
             </div>
@@ -72,6 +65,17 @@ export default {
     }
   },
   methods: {
+    deleteItem: function (id) {
+      this.store.commit('DELETE_ITEM', id)
+    },
+    shareItem: function (id) {
+      // const item = this.store.getters.item
+      // if (item) {
+      //   this.store.commit('ADD_FORM_MODAL_ITEM', item)
+      // }
+    },
+    viewItem: function (id) {
+    }
   },
   computed: {
     store: function () {

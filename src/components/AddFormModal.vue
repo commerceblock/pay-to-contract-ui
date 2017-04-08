@@ -42,6 +42,7 @@
 
 <script>
 import Dropzone from 'vue2-dropzone'
+import { uuid } from '../helpers'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -63,6 +64,7 @@ export default {
   methods: {
     addForm: function (event) {
       this.$parent.$store.commit('ADD_ITEM', {
+        id: uuid(),
         name: this.formName,
         date: new Date().toString()
       })
