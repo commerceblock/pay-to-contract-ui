@@ -42,7 +42,6 @@
 
 <script>
 import Dropzone from 'vue2-dropzone'
-import { uuid } from '../helpers'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,

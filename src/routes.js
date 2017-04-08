@@ -15,8 +15,8 @@ const routes = [
       {
         path: '/',
         component: FormsView,
-        name: 'Forms',
-        meta: {description: 'manage contract forms'}
+        name: 'Create Contract',
+        meta: {description: 'manage and create contract'}
       }, {
         path: '/contracts',
         component: ContractsView,

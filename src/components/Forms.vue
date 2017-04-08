@@ -1,94 +1,113 @@
 <template>
 <section class='content'>
 
-  <addformmodal v-if="showAddFormModal" @close="showAddFormModal = false" />
-
   <div class="row center-block">
-    <h2>Saved Forms</h2>
-    <div class="col-md-12">
-      <div class="box">
-        <div class="box-header">
-            <!-- <h3 class="box-title">Striped Full Width Table</h3> -->
-          <button class='btn btn-primary' v-on:click='showAddFormModal = true'>Add <i class="fa fa-plus"></i></button>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example1_wrapper">
+    <h2>Fill in information</h2>
 
-            <div class="row">
-              <div class="col-sm-12 table-responsive">
-                <table aria-describedby="example1_info" role="grid" id="example1" class="table table-bordered table-striped dataTable">
-                  <thead>
-                    <tr role="row">
-                      <th aria-label="#: activate to sort column descending" aria-sort="ascending" style="width: 167px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting_asc">#</th>
-                      <th aria-label="Name: activate to sort column descending" aria-sort="ascending" style="width: 167px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting_asc">Name</th>
-                      <th aria-label="Date: activate to sort column ascending" style="width: 207px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting">Date</th>
-                      <th aria-label="Actions: activate to sort column ascending" style="width: 182px;" colspan="1" rowspan="1" aria-controls="example1" tabindex="0" class="sorting">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item, index) in items" :class="index % 2 == 0 ? 'even' : 'odd'" role="row">
-                      <td>{{ index+1 }}.</td>
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.date }}</td>
-                      <td>
-                        <button class="btn btn-xs btn-primary" @click='shareItem(item.id)'>
-                         <span class="fa fa-share"></span>
-                        </button>
-                        <button class="btn btn-xs btn-info" @click='viewItem(item.id)'>
-                         <span class="fa fa-eye"></span>
-                        </button>
-                        <button class="btn btn-xs btn-danger" @click='deleteItem(item.id)'>
-                          <span class="fa fa-trash"></span>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <!-- /.box-body -->
-        </div>
+    <div class="input-group form-group">
+      <label>Payment Id</label>
+      <div>
+        <input class="form-control payment-id-input" readonly="readonly" type="text" v-model="paymentId" />
       </div>
     </div>
+
+    <div class="ui form">
+      <div class="input-group">
+        <div class="form-group">
+          <label>Upload your files</label>
+          <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" />
+        </div>
+      </div>
+
+      <div class="input-group form-group">
+        <label>Hash (SHA-512)</label>
+        <div>
+          <input class="form-control contact-hash-input" readonly="readonly" type="text" v-model="contractHash" />
+        </div>
+      </div>
+
+      <div >
+        <button class='btn btn-primary btn-lg' v-on:click='generate()'>Generate</button>
+      </div>
+    </div>
+
   </div>
 
 </section>
 </template>
 
 <script>
-import AddFormModal from './AddFormModal.vue'
+import Dropzone from 'vue2-dropzone'
+import crypto from 'crypto'
+import _ from 'lodash'
+import randomNumber from 'random-number-csprng'
+
+Dropzone.props.autoProcessQueue = {
+  type: Boolean,
+  required: false,
+  default: function () {
+    return false
+  }
+}
 
 export default {
   name: 'MainApp',
   components: {
-    addformmodal: AddFormModal
+    Dropzone
   },
   data: function () {
-    return {
-      showAddFormModal: false
+    const data = {
+      paymentId: '',
+      contractHash: '',
+      fileHashes: []
     }
+    const randomId = randomNumber(1000000, 5000000)
+    randomId
+      .then((number) => { data.paymentId = number })
+      .catch((err) => { console.log('Failed to create random id', err) })
+    return data
   },
   methods: {
-    deleteItem: function (id) {
-      this.store.commit('DELETE_ITEM', id)
+    fileAdded: function (file) {
+      const that = this
+      that.fileHashes[file.name] = {
+        status: 'initial'
+      }
+      const fileReader = new window.FileReader()
+      const hash = crypto.createHash('sha512')
+      fileReader.onload = function (e) {
+        that.fileHashes[file.name] = {
+          status: 'loaded'
+        }
+        hash.update(e.target.result, 'utf8')
+        const fileHash = hash.digest('hex')
+        that.fileHashes[file.name] = {
+          status: 'digested',
+          fileHash: fileHash
+        }
+
+        that.computeContractHash()
+      }
+      // this.fileHashes = event
+      fileReader.readAsText(file)
     },
-    shareItem: function (id) {
-      // const item = this.store.getters.item
-      // if (item) {
-      //   this.store.commit('ADD_FORM_MODAL_ITEM', item)
-      // }
+    fileRemoved: function (file, error, xhr) {
+      delete this.fileHashes[file.name]
+      this.computeContractHash()
     },
-    viewItem: function (id) {
-    }
-  },
-  computed: {
-    store: function () {
-      return this.$parent.$store
-    },
-    items: function () {
-      return this.store.getters.items
+    computeContractHash: function () {
+      const hashArray = _.values(this.fileHashes).map((f) => f.fileHash)
+      if (_.isEmpty(hashArray)) {
+        this.contractHash = null
+      } else if (hashArray.length === 1) {
+        // in case of one, use it as is.
+        this.contractHash = hashArray[0]
+      } else {
+        const combinedHashes = _.values(this.fileHashes).sort().join()
+        const hash = crypto.createHash('sha512')
+        hash.update(combinedHashes, 'utf8')
+        this.contractHash = hash.digest('hex')
+      }
     }
   }
 }
@@ -97,4 +116,17 @@ export default {
 <style scoped>
 @import url('~dropzone/dist/dropzone.css');
 @import 'https://fonts.googleapis.com/css?family=Roboto';
+
+.vue-dropzone {
+  width: 600px;
+  height: 300px;
+}
+
+.contact-hash-input {
+  width: 950px;
+}
+
+.payment-id-input {
+  width: 300px;
+}
 </style>
