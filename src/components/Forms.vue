@@ -32,9 +32,15 @@
                       <td>{{ item.name }}</td>
                       <td>{{ item.date }}</td>
                       <td>
-                       <a @click='viewItem(item.id)'><i class="fa fa-user"></i></a>
-                       <a @click='shareItem(item.id)'><i class="fa fa-pencil"></i></a>
-                       <a @click='deleteItem(item.id)'><i class="fa fa-times"></i></a>
+                        <button class="btn btn-xs btn-primary" @click='shareItem(item.id)'>
+                         <span class="fa fa-share"></span>
+                        </button>
+                        <button class="btn btn-xs btn-info" @click='viewItem(item.id)'>
+                         <span class="fa fa-eye"></span>
+                        </button>
+                        <button class="btn btn-xs btn-danger" @click='deleteItem(item.id)'>
+                          <span class="fa fa-trash"></span>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
