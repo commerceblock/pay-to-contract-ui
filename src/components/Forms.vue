@@ -27,7 +27,7 @@
       </div>
 
       <div >
-        <button class='btn btn-primary btn-lg' v-on:click='generate()'>Generate</button>
+        <button class='btn btn-primary btn-lg' v-on:click='generate'>Generate</button>
       </div>
     </div>
 
@@ -57,8 +57,8 @@ export default {
   },
   data: function () {
     const data = {
-      paymentId: '',
-      contractHash: '',
+      paymentId: null,
+      contractHash: null,
       fileHashes: []
     }
     const randomId = randomNumber(1000000, 5000000)
@@ -68,6 +68,8 @@ export default {
     return data
   },
   methods: {
+    generate: function () {
+    },
     fileAdded: function (file) {
       const that = this
       that.fileHashes[file.name] = {
@@ -85,10 +87,8 @@ export default {
           status: 'digested',
           fileHash: fileHash
         }
-
         that.computeContractHash()
       }
-      // this.fileHashes = event
       fileReader.readAsText(file)
     },
     fileRemoved: function (file, error, xhr) {
