@@ -11,6 +11,10 @@
           <h2 class="text-center">Login</h2>
 
           <div class="input-group">
+            <p>Yo yo!</p>
+          </div>
+
+          <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
             <textarea class="form-control span6 prvKey" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
           </div>
@@ -102,7 +106,7 @@ export default {
 
 .login-modal-container {
   width: 650px;
-  height: 300px;
+  height: 350px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
