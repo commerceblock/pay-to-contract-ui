@@ -1,28 +1,48 @@
 <template>
 <section class='content'>
 
-  <div class='row form-group'>
-    <dropzone id='mainDropzone' url='/' v-on:vdropzone-file-added='fileAdded' v-on:vdropzone-removed-file='fileRemoved'>
-    </dropzone>
-  </div>
+  <invoice-modal v-if="showInvoice" @close="closeInvoiceModal" />
 
-  <div class='row form-group'>
-    <div class='text-center'>
-      <button class='btn btn-primary btn-lg' v-on:click='generate($event)'>Generate</button>
-      <button class='btn btn-primary btn-lg' v-on:click='reset($event)'>Reset</button>
-    </div>
-  </div>
+  <div class="row center-block">
+    <h2>Fill in information</h2>
 
-  <div class='row text-center' v-if='resultReady'>
-    <div class='col-md-12'>
-      <div class='info-box bg-aqua'>
-        <span class='info-box-icon'><i class='ion-ios-chatbubble-outline'></i></span>
-        <div class='info-box-content'>
-          <span class='info-box-text'>Payment Address</span>
-          <span class='info-box-text'>{{ paymentAddress }}</span>
-        </div>
+    <div class="input-group form-group">
+      <label>Payment Identity Public Key</label>
+      <div>
+        <input class="form-control public-key-input" type="text" v-model="paymentIdentityPublicKey" placeholder="Insert the Payment Identity Public Key" />
       </div>
     </div>
+
+    <div class="input-group form-group">
+      <label>Payment Base Public Key</label>
+      <div>
+        <input class="form-control public-key-input" type="text" v-model="paymentBasePublicKey" placeholder="Insert the Payment Base Public Key" />
+      </div>
+    </div>
+
+    <div class="input-group form-group">
+      <label>Upload the contract template files</label>
+      <dropzone id="templateDropzone" url="/" v-on:vdropzone-file-added="templateFileAdded" v-on:vdropzone-removed-file="templateFileRemoved" />
+    </div>
+
+    <div v-if=erroResponse class="text-red"><p>{{erroResponse}}</p></div>
+
+    <div class='btn-toolbar'>
+      <div class="btn-group mr-4" role="group">
+        <button class='btn btn-primary btn-lg forms-buttons' v-on:click='validate'>Validate</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button class='btn btn-primary btn-lg forms-buttons' v-on:click='reset'>Reset</button>
+      </div>
+    </div>
+
+    <div v-if=showSignedContractSection>
+      <div class="input-group form-group">
+        <label>Upload the signed contract files</label>
+        <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" />
+      </div>
+    </div>
+
   </div>
 
 </section>
@@ -31,7 +51,8 @@
 <script>
 import Dropzone from 'vue2-dropzone'
 import crypto from 'crypto'
-import contract from 'pay-to-contract-lib/lib/contract'
+import _ from 'lodash'
+import InvoiceModal from './InvoiceModal.vue'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -44,57 +65,67 @@ Dropzone.props.autoProcessQueue = {
 export default {
   name: 'MainApp',
   components: {
-    Dropzone
+    Dropzone,
+    'invoice-modal': InvoiceModal
   },
   data: function () {
     return {
-      publicKey: '',
-      paymentAddress: '',
-      resultReady: false,
-      fileSignatures: []
+      paymentIdentityPublicKey: null,
+      paymentBasePublicKey: null,
+      templateFileHashes: [],
+      showSignedContractSection: false,
+      showInvoice: false
     }
   },
   methods: {
-    reset: function (event) {
-      this.resultReady = false
-      this.publicKey = ''
-      this.fileSignatures = []
-      this.paymentAddress = ''
-      //  TODO:: clear dropzone
+    validate: function () {
+      this.showSignedContractSection = true
     },
-    generate: function (event) {
-      // now we have access to the native event
-      if (event) event.preventDefault()
-      const hdPublicKey = this.$parent.store.getters.privateKey.hdPublicKey
-      const concatenatedSignatures = this.fileSignatures.sort().join()
-      const contractSignatureHash = contract.signAndHashContract(hdPublicKey.publicKey, concatenatedSignatures)
-      const paymentAddress = contract.generateChildPublicKey(hdPublicKey, contractSignatureHash)
-      this.paymentAddress = paymentAddress.toString()
-      this.resultReady = true
+    reset: function () {
+      this.showSignedContractSection = false
+      this.paymentIdentityPublicKey = null
+      this.paymentBasePublicKey = null
     },
-    fileAdded: function (file) {
+    generate: function () {
+    },
+    templateFileAdded: function (file) {
       const that = this
-      that.fileSignatures[file.name] = {
+      that.fileHashes[file.name] = {
         status: 'initial'
       }
       const fileReader = new window.FileReader()
       const hash = crypto.createHash('sha512')
       fileReader.onload = function (e) {
-        that.fileSignatures[file.name] = {
+        that.fileHashes[file.name] = {
           status: 'loaded'
         }
         hash.update(e.target.result, 'utf8')
-        const signature = hash.digest('hex')
-        that.fileSignatures[file.name] = {
+        const fileHash = hash.digest('hex')
+        that.fileHashes[file.name] = {
           status: 'digested',
-          signature: signature
+          fileHash: fileHash
         }
+        that.computeContractHash()
       }
-      // this.fileSignatures = event
       fileReader.readAsText(file)
     },
-    fileRemoved: function (file, error, xhr) {
-      delete this.fileSignatures[file.name]
+    templateFileRemoved: function (file, error, xhr) {
+      delete this.fileHashes[file.name]
+      this.computeContractHash()
+    },
+    computeContractHash: function () {
+      const hashArray = _.values(this.fileHashes).map((f) => f.fileHash)
+      if (_.isEmpty(hashArray)) {
+        this.contractHash = null
+      } else if (hashArray.length === 1) {
+        // in case of one, use it as is.
+        this.contractHash = hashArray[0]
+      } else {
+        const combinedHashes = _.values(this.fileHashes).sort().join()
+        const hash = crypto.createHash('sha512')
+        hash.update(combinedHashes, 'utf8')
+        this.contractHash = hash.digest('hex')
+      }
     }
   }
 }
@@ -103,4 +134,17 @@ export default {
 <style scoped>
 @import url('~dropzone/dist/dropzone.css');
 @import 'https://fonts.googleapis.com/css?family=Roboto';
+
+.vue-dropzone {
+  width: 600px;
+  height: 300px;
+}
+
+.public-key-input {
+  width: 950px;
+}
+
+.forms-buttons {
+  width: 100px;
+}
 </style>

@@ -69,6 +69,11 @@ const mutations = {
   },
   CLEAR_INVOICE_REQUEST_DATA (state) {
     state.invoiceRequestData = null
+  },
+  GENERATE_INVOICE_DATA (state, metaData) {
+  },
+  CLEAR_INVOICE_DATA (state) {
+    // state.invoiceRequestData = null
   }
 }
 

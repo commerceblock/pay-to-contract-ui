@@ -15,13 +15,13 @@ const routes = [
       {
         path: '/',
         component: FormsView,
-        name: 'Create Contract',
-        meta: {description: 'manage and create contract'}
+        name: 'Create Contract Template',
+        meta: {description: 'manage and create contract templates'}
       }, {
         path: '/contracts',
         component: ContractsView,
-        name: 'Contracts',
-        meta: {description: 'manage and sign contracts'}
+        name: 'Redeem Contract',
+        meta: {description: 'sign and redeem contracts'}
       }
     ]
   }, {
