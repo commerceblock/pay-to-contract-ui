@@ -46,10 +46,9 @@
 
 <script>
 import Dropzone from 'vue2-dropzone'
-import crypto from 'crypto'
-import _ from 'lodash'
 import randomNumber from 'random-number-csprng'
 import InvoiceRequestModal from './InvoiceRequestModal.vue'
+import { computeFilesHash, computeFileHash } from '../helpers'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -91,39 +90,21 @@ export default {
       that.fileHashes[file.name] = {
         status: 'initial'
       }
-      const fileReader = new window.FileReader()
-      const hash = crypto.createHash('sha512')
-      fileReader.onload = function (e) {
-        that.fileHashes[file.name] = {
-          status: 'loaded'
-        }
-        hash.update(e.target.result, 'utf8')
-        const fileHash = hash.digest('hex')
-        that.fileHashes[file.name] = {
-          status: 'digested',
-          fileHash: fileHash
-        }
-        that.computeContractHash()
-      }
-      fileReader.readAsText(file)
+      computeFileHash(file)
+        .then((fileHash) => {
+          that.fileHashes[file.name] = {
+            status: 'digested',
+            fileHash: fileHash
+          }
+          that.updateContractHash()
+        })
     },
     fileRemoved: function (file, error, xhr) {
       delete this.fileHashes[file.name]
-      this.computeContractHash()
+      this.updateContractHash()
     },
-    computeContractHash: function () {
-      const hashArray = _.values(this.fileHashes).map((f) => f.fileHash)
-      if (_.isEmpty(hashArray)) {
-        this.contractHash = null
-      } else if (hashArray.length === 1) {
-        // in case of one, use it as is.
-        this.contractHash = hashArray[0]
-      } else {
-        const combinedHashes = _.values(this.fileHashes).sort().join()
-        const hash = crypto.createHash('sha512')
-        hash.update(combinedHashes, 'utf8')
-        this.contractHash = hash.digest('hex')
-      }
+    updateContractHash: function () {
+      this.contractHash = computeFilesHash(this.fileHashes)
     },
     closeInvoiceRequestModal: function () {
       this.showInvoiceRequest = false

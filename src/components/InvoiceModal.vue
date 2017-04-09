@@ -8,10 +8,10 @@
         <div class="modal-content invoice-modal-container">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-            <h4 class="modal-title">Invoice Request</h4>
+            <h4 class="modal-title">Invoice</h4>
           </div>
           <div class="modal-body">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Payment Id</label>
               <input class="form-control" readonly="readonly" type="text" v-model="paymentId" />
             </div>
@@ -32,13 +32,13 @@
               <div>
                 <qrcode :cls="'invoice-qr'" value="paymentBaseAddress" />
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="modal-footer">
-            <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
+            <!-- <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
               <button type="button" class="btn btn-primary">Export</button>
             </a>
-            <button type="button" class="btn btn-primary" @click="close">Close</button>
+            <button type="button" class="btn btn-primary" @click="close">Close</button> -->
           </div>
         </div>
       </div>
@@ -73,24 +73,6 @@ export default {
     },
     paymentId: function () {
       return this.invoiceRequestData.paymentId
-    },
-    contractHash: function () {
-      return this.invoiceRequestData.contractHash
-    },
-    paymentIdentityPublicKey: function () {
-      return this.invoiceRequestData.paymentIdentityPublicKey
-    },
-    paymentBasePublicKey: function () {
-      return this.invoiceRequestData.paymentBasePublicKey
-    },
-    paymentBaseAddress: function () {
-      return this.invoiceRequestData.paymentBaseAddress
-    },
-    invoiceRequestFileData: function () {
-      return this.invoiceRequestData.invoiceRequestFileData
-    },
-    invoiceRequestFileName: function () {
-      return this.invoiceRequestData.invoiceRequestFileName
     }
   }
 }

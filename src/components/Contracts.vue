@@ -37,9 +37,17 @@
     </div>
 
     <div v-if=showSignedContractSection>
-      <div class="input-group form-group">
+      <div class="col-md-6"></div>
+      <div class="divider-vertical"></div>
+      <div class="col-md-5"></div>
+      <div class="input-group form-group" id="contractDropzoneSection">
         <label>Upload the signed contract files</label>
         <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" />
+      </div>
+      <div class='btn-toolbar'>
+        <div class="btn-group mr-4" role="group">
+          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='generate'>Generate</button>
+        </div>
       </div>
     </div>
 
@@ -50,9 +58,9 @@
 
 <script>
 import Dropzone from 'vue2-dropzone'
-import crypto from 'crypto'
-import _ from 'lodash'
 import InvoiceModal from './InvoiceModal.vue'
+import { computeFileHash } from '../helpers'
+import $ from 'jquery'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -80,6 +88,7 @@ export default {
   methods: {
     validate: function () {
       this.showSignedContractSection = true
+      $('html, body').animate({ scrollTop: $('#contractDropzoneSection').offset().top }, 500)
     },
     reset: function () {
       this.showSignedContractSection = false
@@ -87,45 +96,26 @@ export default {
       this.paymentBasePublicKey = null
     },
     generate: function () {
+      this.showInvoice = true
     },
     templateFileAdded: function (file) {
       const that = this
       that.fileHashes[file.name] = {
         status: 'initial'
       }
-      const fileReader = new window.FileReader()
-      const hash = crypto.createHash('sha512')
-      fileReader.onload = function (e) {
-        that.fileHashes[file.name] = {
-          status: 'loaded'
-        }
-        hash.update(e.target.result, 'utf8')
-        const fileHash = hash.digest('hex')
-        that.fileHashes[file.name] = {
-          status: 'digested',
-          fileHash: fileHash
-        }
-        that.computeContractHash()
-      }
-      fileReader.readAsText(file)
+      computeFileHash(file)
+        .then((fileHash) => {
+          that.fileHashes[file.name] = {
+            status: 'digested',
+            fileHash: fileHash
+          }
+        })
     },
     templateFileRemoved: function (file, error, xhr) {
       delete this.fileHashes[file.name]
-      this.computeContractHash()
     },
-    computeContractHash: function () {
-      const hashArray = _.values(this.fileHashes).map((f) => f.fileHash)
-      if (_.isEmpty(hashArray)) {
-        this.contractHash = null
-      } else if (hashArray.length === 1) {
-        // in case of one, use it as is.
-        this.contractHash = hashArray[0]
-      } else {
-        const combinedHashes = _.values(this.fileHashes).sort().join()
-        const hash = crypto.createHash('sha512')
-        hash.update(combinedHashes, 'utf8')
-        this.contractHash = hash.digest('hex')
-      }
+    closeInvoiceModal: function () {
+      this.showInvoice = false
     }
   }
 }
@@ -146,5 +136,12 @@ export default {
 
 .forms-buttons {
   width: 100px;
+}
+
+.divider-vertical {
+  height: 50px;
+  float: left;
+  opacity: 0.5;
+  margin: 0 15px;
 }
 </style>
