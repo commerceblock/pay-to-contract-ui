@@ -11,7 +11,7 @@
           <h2 class="text-center">Login</h2>
 
           <div class="input-group">
-            <p>Yo yo!</p>
+            <p>Welcome!  Please start with net and keep your seed safe.</p>
           </div>
 
           <div class="input-group">
