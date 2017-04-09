@@ -22,11 +22,16 @@
             <div class="form-group">
               <label>Payment Identity</label>
               <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
+              <div>
+                <qrcode :cls="'invoice-request-qr'" value="paymentIdentityAddress" />
+              </div>
             </div>
             <div class="form-group">
               <label>Payment Base</label>
               <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
-              <!-- <qrcode val="ddddd" /> -->
+              <div>
+                <qrcode :cls="'invoice-request-qr'" value="paymentBaseAddress" />
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -40,7 +45,7 @@
 </template>
 
 <script>
-import Qrcode from 'vue-qrcode'
+import Qrcode from 'v-qrcode'
 
 export default {
   name: 'InvoiceRequestModal',
@@ -74,6 +79,9 @@ export default {
     },
     paymentBasePublicKey: function () {
       return this.invoiceRequestData.paymentBasePublicKey
+    },
+    paymentBaseAddress: function () {
+      return this.invoiceRequestData.paymentBaseAddress
     }
   }
 }
@@ -143,5 +151,9 @@ export default {
 .invoice-request-modal-leave-active .invoice-request-modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.invoice-request-qr {
+  margin: 10px 10px 0px 0px
 }
 </style>

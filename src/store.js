@@ -31,14 +31,20 @@ const mutations = {
   },
   SET_INVOICE_REQUEST_DATA (state, data) {
     if (data) {
-      data.paymentIdentityPublicKey = state.privateKey
+      const paymentIdentityHDPublicKey = state.privateKey
         .derive(data.paymentId)
         .hdPublicKey
+      data.paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
+      data.paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
+        .toAddress()
         .toString()
       const paymentBasePath = contract.derivePath(data.contractHash)
-      data.paymentBasePublicKey = state.privateKey
+      const paymentBaseHDPublicKey = state.privateKey
         .derive(paymentBasePath)
         .hdPublicKey
+      data.paymentBasePublicKey = paymentBaseHDPublicKey.toString()
+      data.paymentBaseAddress = paymentBaseHDPublicKey.publicKey
+        .toAddress()
         .toString()
     }
     state.invoiceRequestData = data

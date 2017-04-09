@@ -31,6 +31,7 @@
     "moment": "^2.12.0",
     "pay-to-contract-lib": "git://github.com/commerceblock/pay-to-contract-lib.git",
     "random-number-csprng": "^1.0.2",
+    "v-qrcode": "^1.0.3",
     "vue": "^2.0.3",
     "vue-bootstrap-toggle": "^1.0.4",
     "vue-resource": "^1.0.3",
