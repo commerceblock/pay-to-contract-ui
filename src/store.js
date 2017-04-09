@@ -29,25 +29,46 @@ const mutations = {
   SET_PRIVATE_KEY (state, privateKey) {
     state.privateKey = privateKey
   },
-  SET_INVOICE_REQUEST_DATA (state, data) {
-    if (data) {
-      const paymentIdentityHDPublicKey = state.privateKey
-        .derive(data.paymentId)
-        .hdPublicKey
-      data.paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
-      data.paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
-        .toAddress()
-        .toString()
-      const paymentBasePath = contract.derivePath(data.contractHash)
-      const paymentBaseHDPublicKey = state.privateKey
-        .derive(paymentBasePath)
-        .hdPublicKey
-      data.paymentBasePublicKey = paymentBaseHDPublicKey.toString()
-      data.paymentBaseAddress = paymentBaseHDPublicKey.publicKey
-        .toAddress()
-        .toString()
+  GENERATE_INVOICE_REQUEST_DATA (state, metaData) {
+    const paymentId = metaData.paymentId
+    const contractHash = metaData.contractHash
+    const paymentIdentityHDPublicKey = state.privateKey
+      .derive(paymentId)
+      .hdPublicKey
+    const paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
+    const paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
+      .toAddress()
+      .toString()
+    const paymentBasePath = contract.derivePath(contractHash)
+    const paymentBaseHDPublicKey = state.privateKey
+      .derive(paymentBasePath)
+      .hdPublicKey
+    const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
+    const paymentBaseAddress = paymentBaseHDPublicKey.publicKey
+      .toAddress()
+      .toString()
+    const invoiceRequestFileName = `invoice-request-${paymentId}.json`
+    const fileContent = {
+      payment_id: paymentId,
+      contract_hash: contractHash,
+      payment_identity_public_key: paymentIdentityPublicKey,
+      payment_identity_address: paymentIdentityAddress,
+      payment_base_public_key: paymentBasePublicKey,
+      payment_base_address: paymentBaseAddress
     }
-    state.invoiceRequestData = data
+    const invoiceRequestFileData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(fileContent, null, 2))
+    state.invoiceRequestData = {
+      paymentId,
+      contractHash,
+      paymentIdentityPublicKey,
+      paymentBasePublicKey,
+      paymentBaseAddress,
+      invoiceRequestFileData,
+      invoiceRequestFileName
+    }
+  },
+  CLEAR_INVOICE_REQUEST_DATA (state) {
+    state.invoiceRequestData = null
   }
 }
 

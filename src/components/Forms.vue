@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     generate: function () {
-      this.$parent.store.commit('SET_INVOICE_REQUEST_DATA', {
+      this.$parent.store.commit('GENERATE_INVOICE_REQUEST_DATA', {
         paymentId: this.paymentId,
         contractHash: this.contractHash
       })

@@ -35,6 +35,9 @@
             </div>
           </div>
           <div class="modal-footer">
+            <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
+              <button type="button" class="btn btn-primary">Export</button>
+            </a>
             <button type="button" class="btn btn-primary" @click="close">Close</button>
           </div>
         </div>
@@ -58,7 +61,7 @@ export default {
   methods: {
     close: function () {
       this.$emit('close')
-      this.store.commit('SET_INVOICE_REQUEST_DATA', null)
+      this.store.commit('CLEAR_INVOICE_REQUEST_DATA')
     }
   },
   computed: {
@@ -82,6 +85,12 @@ export default {
     },
     paymentBaseAddress: function () {
       return this.invoiceRequestData.paymentBaseAddress
+    },
+    invoiceRequestFileData: function () {
+      return this.invoiceRequestData.invoiceRequestFileData
+    },
+    invoiceRequestFileName: function () {
+      return this.invoiceRequestData.invoiceRequestFileName
     }
   }
 }
@@ -112,8 +121,8 @@ export default {
 }
 
 .invoice-request-modal-container {
-  width: 750px;
-  height: 750px;
+  width: 800px;
+  height: 700px;
   margin: 0px auto;
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
