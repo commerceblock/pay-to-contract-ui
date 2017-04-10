@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import bitcore from 'bitcore-lib'
+import Networks from 'bitcore-lib/lib/networks'
+import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
 import contract from 'pay-to-contract-lib/lib/contract'
+import { generateQRData } from './helpers'
 
 Vue.use(Vuex)
 
@@ -11,7 +13,8 @@ const state = {
   serverURI: 'http://10.110.1.136:8080',
   privateKey: null,
   network: null,
-  invoiceRequestData: null
+  invoiceRequestData: null,
+  invoiceData: null
 }
 
 const mutations = {
@@ -23,8 +26,8 @@ const mutations = {
   },
   SET_NETWORK_TYPE (state, network) {
     state.network = network
-    bitcore.Networks.defaultNetwork = bitcore.Networks[network]
-    console.log('Default Network:' + bitcore.Networks.defaultNetwork)
+    Networks.defaultNetwork = Networks[network]
+    console.log('Default Network:' + Networks.defaultNetwork)
   },
   SET_PRIVATE_KEY (state, privateKey) {
     state.privateKey = privateKey
@@ -40,23 +43,20 @@ const mutations = {
       .toAddress()
       .toString()
     const paymentBasePath = contract.derivePath(contractHash)
-    const paymentBaseHDPublicKey = state.privateKey
-      .derive(paymentBasePath)
-      .hdPublicKey
+    const paymentBaseHDPublicKey = paymentIdentityHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
     const paymentBaseAddress = paymentBaseHDPublicKey.publicKey
       .toAddress()
       .toString()
-    const invoiceRequestFileName = `invoice-request-${paymentId}.json`
-    const fileContent = {
+    const invoiceRequestFileName = 'invoice-request.json'
+    const invoiceRequestFileData = generateQRData({
       payment_id: paymentId,
       contract_hash: contractHash,
       payment_identity_public_key: paymentIdentityPublicKey,
       payment_identity_address: paymentIdentityAddress,
       payment_base_public_key: paymentBasePublicKey,
       payment_base_address: paymentBaseAddress
-    }
-    const invoiceRequestFileData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(fileContent, null, 2))
+    })
     state.invoiceRequestData = {
       paymentId,
       contractHash,
@@ -71,15 +71,36 @@ const mutations = {
     state.invoiceRequestData = null
   },
   GENERATE_INVOICE_DATA (state, metaData) {
+    const signedContractHash = metaData.signedContractHash
+    const paymentAddressPath = contract.derivePath(signedContractHash)
+    const paymentBasePublicKey = metaData.paymentBasePublicKey
+    const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
+    const paymentAddressHDPublicKey = paymentBaseHDPublicKey.derive(paymentAddressPath)
+    const paymentAddressPublicKey = paymentAddressHDPublicKey.publicKey.toString()
+    const paymentAddressAddress = paymentAddressHDPublicKey.publicKey.toAddress().toString()
+    const invoiceFileName = 'invoice.json'
+    const invoiceFileData = generateQRData({
+      signed_contract_hash: signedContractHash,
+      paymentAddressPublicKey: paymentAddressPublicKey,
+      paymentAddressAddress: paymentAddressAddress
+    })
+    state.invoiceData = {
+      signedContractHash,
+      paymentAddressPublicKey,
+      paymentAddressAddress,
+      invoiceFileName,
+      invoiceFileData
+    }
   },
   CLEAR_INVOICE_DATA (state) {
-    // state.invoiceRequestData = null
+    state.invoiceData = null
   }
 }
 
 const getters = {
   privateKey: (state) => state.privateKey,
-  invoiceRequestData: (state) => state.invoiceRequestData
+  invoiceRequestData: (state) => state.invoiceRequestData,
+  invoiceData: (state) => state.invoiceData
 }
 
 export default new Vuex.Store({

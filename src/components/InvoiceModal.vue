@@ -11,34 +11,23 @@
             <h4 class="modal-title">Invoice</h4>
           </div>
           <div class="modal-body">
-            <!-- <div class="form-group">
-              <label>Payment Id</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentId" />
+            <div class="form-group">
+              <label>Singed Contract Hash</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="signedContractHash" />
             </div>
             <div class="form-group">
-              <label>Contract Hash</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
-            </div>
-            <div class="form-group">
-              <label>Payment Identity</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
+              <label>Payment Address</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPublicKey" />
               <div>
-                <qrcode :cls="'invoice-qr'" value="paymentIdentityAddress" />
+                <qrcode :cls="'invoice-qr'" value="paymentAddressAddress" />
               </div>
             </div>
-            <div class="form-group">
-              <label>Payment Base</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
-              <div>
-                <qrcode :cls="'invoice-qr'" value="paymentBaseAddress" />
-              </div>
-            </div> -->
           </div>
           <div class="modal-footer">
-            <!-- <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
+            <a :href="invoiceFileData" :download="invoiceFileName">
               <button type="button" class="btn btn-primary">Export</button>
             </a>
-            <button type="button" class="btn btn-primary" @click="close">Close</button> -->
+            <button type="button" class="btn btn-primary" @click="close">Close</button>
           </div>
         </div>
       </div>
@@ -68,11 +57,23 @@ export default {
     store: function () {
       return this.$parent.$store
     },
-    invoiceRequestData: function () {
-      return this.store.getters.invoiceRequestData
+    invoiceData: function () {
+      return this.store.getters.invoiceData
     },
-    paymentId: function () {
-      return this.invoiceRequestData.paymentId
+    signedContractHash: function () {
+      return this.invoiceData.signedContractHash
+    },
+    paymentAddressPublicKey: function () {
+      return this.invoiceData.paymentAddressPublicKey
+    },
+    paymentAddressAddress: function () {
+      return this.invoiceData.paymentAddressAddress
+    },
+    invoiceFileName: function () {
+      return this.invoiceData.invoiceFileName
+    },
+    invoiceFileData: function () {
+      return this.invoiceData.invoiceFileData
     }
   }
 }

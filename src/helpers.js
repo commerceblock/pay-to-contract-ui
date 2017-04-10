@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import crypto from 'crypto'
+import contract from 'pay-to-contract-lib/lib/contract'
+import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
 
 exports.computeFilesHash = function (fileHashes) {
   const hashArray = _.values(fileHashes).map((f) => f.fileHash)
@@ -16,6 +18,24 @@ exports.computeFilesHash = function (fileHashes) {
 
 exports.computeFileHash = function (file) {
   return readAsText(file).then(computeTextHash)
+}
+
+exports.validatePaymentBase = function (paymentIdentityPublicKey, paymentBasePublicKey, contractTemplateHash) {
+  const paymentBasePath = contract.derivePath(contractTemplateHash)
+  const paymentIdentityHDPublicKey = new HDPublicKey(paymentIdentityPublicKey)
+  const actualPaymentBasePublicKey = paymentIdentityHDPublicKey
+    .derive(paymentBasePath)
+    .toString()
+  if (actualPaymentBasePublicKey === paymentBasePublicKey) {
+    return null
+  } else {
+    return 'Payment base is not derived from the given files'
+  }
+}
+
+exports.generateQRData = function (data) {
+  const encodedData = encodeURIComponent(JSON.stringify(data, null, 2))
+  return `data:text/json;charset=utf-8,${encodedData}`
 }
 
 const computeTextHash = exports.computeTextHash = function (text) {

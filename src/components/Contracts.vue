@@ -1,4 +1,4 @@
-<template>
+that.templateFileHashes<template>
 <section class='content'>
 
   <invoice-modal v-if="showInvoice" @close="closeInvoiceModal" />
@@ -57,10 +57,14 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import Dropzone from 'vue2-dropzone'
 import InvoiceModal from './InvoiceModal.vue'
-import { computeFileHash } from '../helpers'
-import $ from 'jquery'
+import {
+  computeFileHash,
+  validatePaymentBase,
+  computeFilesHash
+} from '../helpers'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -81,38 +85,73 @@ export default {
       paymentIdentityPublicKey: null,
       paymentBasePublicKey: null,
       templateFileHashes: [],
+      contractFileHashes: [],
+      erroResponse: null,
       showSignedContractSection: false,
       showInvoice: false
     }
   },
   methods: {
     validate: function () {
-      this.showSignedContractSection = true
-      $('html, body').animate({ scrollTop: $('#contractDropzoneSection').offset().top }, 500)
+      const contractTemplateHash = computeFilesHash(this.templateFileHashes)
+      const error = validatePaymentBase(this.paymentIdentityPublicKey, this.paymentBasePublicKey, contractTemplateHash)
+      if (error) {
+        this.erroResponse = error
+      } else {
+        this.erroResponse = false
+        this.showSignedContractSection = true
+        // TODO:: use proper vue animaiton
+        setTimeout(() => {
+          $('html, body').animate({ scrollTop: $('#contractDropzoneSection').offset().top }, 500)
+        }, 150)
+      }
     },
     reset: function () {
       this.showSignedContractSection = false
+      this.showInvoice = false
       this.paymentIdentityPublicKey = null
       this.paymentBasePublicKey = null
+      this.erroResponse = null
     },
     generate: function () {
+      const signedContractHash = computeFilesHash(this.templateFileHashes)
+      this.$parent.store.commit('GENERATE_INVOICE_DATA', {
+        signedContractHash,
+        paymentBasePublicKey: this.paymentBasePublicKey
+      })
       this.showInvoice = true
     },
     templateFileAdded: function (file) {
       const that = this
-      that.fileHashes[file.name] = {
+      that.templateFileHashes[file.name] = {
         status: 'initial'
       }
       computeFileHash(file)
         .then((fileHash) => {
-          that.fileHashes[file.name] = {
+          that.templateFileHashes[file.name] = {
             status: 'digested',
             fileHash: fileHash
           }
         })
     },
     templateFileRemoved: function (file, error, xhr) {
-      delete this.fileHashes[file.name]
+      delete this.templateFileHashes[file.name]
+    },
+    contractFileAdded: function (file) {
+      const that = this
+      that.contractFileHashes[file.name] = {
+        status: 'initial'
+      }
+      computeFileHash(file)
+        .then((fileHash) => {
+          that.contractFileHashes[file.name] = {
+            status: 'digested',
+            fileHash: fileHash
+          }
+        })
+    },
+    contractFileRemoved: function (file, error, xhr) {
+      delete this.contractFileHashes[file.name]
     },
     closeInvoiceModal: function () {
       this.showInvoice = false
