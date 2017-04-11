@@ -1,32 +1,27 @@
-that.templateFileHashes<template>
+<template>
 <section class='content'>
-
-  <invoice-modal v-if="showInvoice" @close="closeInvoiceModal" />
-
+  <modal v-if="showInvoice" @close="closeInvoiceModal" />
   <div class="row center-block">
     <h2>Fill in information</h2>
-
     <div class="input-group form-group">
       <label>Payment Identity Public Key</label>
       <div>
         <input class="form-control public-key-input" type="text" v-model="paymentIdentityPublicKey" placeholder="Insert the Payment Identity Public Key" />
       </div>
     </div>
-
     <div class="input-group form-group">
       <label>Payment Base Public Key</label>
       <div>
         <input class="form-control public-key-input" type="text" v-model="paymentBasePublicKey" placeholder="Insert the Payment Base Public Key" />
       </div>
     </div>
-
     <div class="input-group form-group">
       <label>Upload the contract template files</label>
       <dropzone id="templateDropzone" url="/" v-on:vdropzone-file-added="templateFileAdded" v-on:vdropzone-removed-file="templateFileRemoved" />
     </div>
-
-    <div v-if=erroResponse class="text-red"><p>{{erroResponse}}</p></div>
-
+    <div v-if=erroResponse class="text-red">
+      <p>{{erroResponse}}</p>
+    </div>
     <div class='btn-toolbar'>
       <div class="btn-group mr-4" role="group">
         <button class='btn btn-primary btn-lg forms-buttons' v-on:click='validate'>Validate</button>
@@ -35,7 +30,6 @@ that.templateFileHashes<template>
         <button class='btn btn-primary btn-lg forms-buttons' v-on:click='reset'>Reset</button>
       </div>
     </div>
-
     <div v-if=showSignedContractSection>
       <div class="col-md-6"></div>
       <div class="divider-vertical"></div>
@@ -50,21 +44,19 @@ that.templateFileHashes<template>
         </div>
       </div>
     </div>
-
   </div>
-
 </section>
 </template>
 
 <script>
 import $ from 'jquery'
 import Dropzone from 'vue2-dropzone'
-import InvoiceModal from './InvoiceModal.vue'
+import Modal from './Modal.vue'
 import {
   computeFileHash,
   validatePaymentBase,
   computeFilesHash
-} from '../helpers'
+} from '../../helpers'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -78,7 +70,7 @@ export default {
   name: 'MainApp',
   components: {
     Dropzone,
-    'invoice-modal': InvoiceModal
+    Modal
   },
   data: function () {
     return {

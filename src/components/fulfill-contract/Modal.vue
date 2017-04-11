@@ -3,7 +3,6 @@
   <div class="invoice-modal-mask">
     <div class="invoice-modal-wrapper modal">
       <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content invoice-modal-container">
           <div class="modal-header">
@@ -105,7 +104,7 @@ export default {
 
 .invoice-modal-container {
   width: 800px;
-  height: 700px;
+  height: 500px;
   margin: 0px auto;
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
@@ -119,8 +118,6 @@ export default {
 .invoice-modal-body {
   margin: 20px 0;
 }
-
-
 
 /*
  * The following styles are auto-applied to elements with

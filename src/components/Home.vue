@@ -46,7 +46,7 @@
         <ul class="sidebar-menu">
           <li class="header">TOOLS</li>
           <li class="active pageLink" v-on:click="toggleMenu"><router-link to="/"><i class="fa fa-paperclip"></i><span class="page">Create Contract</span></router-link></li>
-          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/contracts"><i class="fa fa-file-text-o"></i><span class="page">Redeem Contract</span></router-link></li>
+          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/fulfill"><i class="fa fa-paperclip"></i><span class="page">Fulfill Contract</span></router-link></li>
         </ul>
         <!-- /.sidebar-menu -->
       </section>

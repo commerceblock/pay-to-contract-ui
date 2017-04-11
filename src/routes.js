@@ -3,7 +3,7 @@ import NotFoundView from './components/404.vue'
 
 // Import Views - Dash
 import CreateContractView from './components/create-contract/Home.vue'
-import ContractsView from './components/Contracts.vue'
+import FulfillContractView from './components/fulfill-contract/Home.vue'
 
 // Routes
 const routes = [
@@ -18,10 +18,10 @@ const routes = [
         name: 'Create Invoice Contract',
         meta: {description: ''}
       }, {
-        path: '/contracts',
-        component: ContractsView,
-        name: 'Redeem Contract',
-        meta: {description: 'sign and redeem contracts'}
+        path: '/fulfill',
+        component: FulfillContractView,
+        name: 'Fulfill Contract',
+        meta: {description: ''}
       }
     ]
   }, {
