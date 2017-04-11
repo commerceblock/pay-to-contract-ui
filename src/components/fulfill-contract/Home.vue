@@ -146,7 +146,8 @@ export default {
     },
     mounted: function () {
       this.generatePaymentId()
-      ['contractDropzone', 'templateDropzone'].forEach((id) => {
+      // const ids = ['contractDropzone', 'templateDropzone']
+      _.forEach(['contractDropzone', 'templateDropzone'], (id) => {
         const dropzoneComponent = _.find(this.$children, { id })
         disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
       })
