@@ -1,7 +1,7 @@
 <template>
 <section class='content'>
 
-  <invoice-request v-if="showInvoiceRequest" @close="closeInvoiceRequestModal" />
+  <modal v-if="showInvoiceRequest" @close="closeInvoiceRequestModal" />
 
   <div class="row center-block">
     <h2>Fill in information</h2>
@@ -47,8 +47,8 @@
 <script>
 import Dropzone from 'vue2-dropzone'
 import randomNumber from 'random-number-csprng'
-import InvoiceRequestModal from './InvoiceRequestModal.vue'
-import { computeFilesHash, computeFileHash } from '../helpers'
+import { computeFilesHash, computeFileHash } from '../../helpers'
+import Modal from './Modal.vue'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -62,7 +62,7 @@ export default {
   name: 'MainApp',
   components: {
     Dropzone,
-    'invoice-request': InvoiceRequestModal
+    Modal
   },
   data: function () {
     const data = {

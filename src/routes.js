@@ -2,7 +2,7 @@ import HomeView from './components/Home.vue'
 import NotFoundView from './components/404.vue'
 
 // Import Views - Dash
-import FormsView from './components/Forms.vue'
+import CreateContractView from './components/create-contract/Home.vue'
 import ContractsView from './components/Contracts.vue'
 
 // Routes
@@ -14,9 +14,9 @@ const routes = [
     children: [
       {
         path: '/',
-        component: FormsView,
-        name: 'Create Contract Template',
-        meta: {description: 'manage and create contract templates'}
+        component: CreateContractView,
+        name: 'Create Invoice Contract',
+        meta: {description: ''}
       }, {
         path: '/contracts',
         component: ContractsView,
