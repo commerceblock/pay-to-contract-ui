@@ -16,7 +16,7 @@ const routes = [
       {
         path: '/',
         component: CreateContractView,
-        name: 'Create Invoice Contract',
+        name: 'Create Contract',
         meta: {description: ''}
       }, {
         path: '/fulfill',
