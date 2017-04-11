@@ -95,11 +95,15 @@ export default {
       }
       computeFileHash(file)
         .then((fileHash) => {
-          that.fileHashes[file.name] = {
-            status: 'digested',
-            fileHash: fileHash
+          const fileHashHolder = that.fileHashes[file.name]
+          if (fileHashHolder) {
+            // Only updates if holder exists, this could be null
+            // if the file removed manually or automaically
+            // if the user exceeded the max number of files
+            fileHashHolder.status = 'digested'
+            fileHashHolder.fileHash = fileHash
+            that.updateContractHash()
           }
-          that.updateContractHash()
         })
     },
     fileRemoved: function (file, error, xhr) {
