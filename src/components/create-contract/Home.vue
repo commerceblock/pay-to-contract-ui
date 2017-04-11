@@ -6,10 +6,10 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
 
-    <div class="input-group">
-      <p>Invoice contracts are created by uploading files and then generating hashes which are used as part of the payment address.</p>
-      <p>Payment address can be used by customer to validate associated data (uploaded files) with the derived address.</p>
-      <p>By generating this payment address you are associate the files with the derived address. </p>
+    <div class="input-group form-group">
+      <div>Invoice contracts are created by uploading files and then generating hashes which are used as part of the payment address.</div>
+      <div>Payment address can be used by customer to validate associated data (uploaded files) with the derived address.</div>
+      <div>By generating this payment address you are associate the files with the derived address.</div>
     </div>
 
     <div class="input-group form-group">
