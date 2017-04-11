@@ -17,7 +17,7 @@
     </div>
     <div class="input-group form-group">
       <label>Upload contract template files</label>
-      <dropzone id="templateDropzone" url="/" v-on:vdropzone-file-added="templateFileAdded" v-on:vdropzone-removed-file="templateFileRemoved" autoProcessQueue="false" />
+      <dropzone id="templateDropzone" url="/" v-on:vdropzone-file-added="templateFileAdded" v-on:vdropzone-removed-file="templateFileRemoved" :autoProcessQueue=false />
     </div>
     <div v-if=erroResponse class="text-red">
       <p>{{erroResponse}}</p>
@@ -36,7 +36,7 @@
       <div class="col-md-5"></div>
       <div class="input-group form-group" id="contractDropzoneSection">
         <label>Upload signed contract files</label>
-        <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" autoProcessQueue="false" />
+        <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" :autoProcessQueue=false />
       </div>
       <div class='btn-toolbar'>
         <div class="btn-group mr-4" role="group">

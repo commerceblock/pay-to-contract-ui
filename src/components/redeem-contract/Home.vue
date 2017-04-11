@@ -17,7 +17,7 @@
     </div>
     <div class="input-group form-group">
       <label>Upload signed contract files</label>
-      <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" autoProcessQueue="false" />
+      <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" :autoProcessQueue=false />
     </div>
     <div v-if=erroResponse class="text-red">
       <p>{{erroResponse}}</p>
