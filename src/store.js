@@ -36,7 +36,7 @@ const mutations = {
     const paymentId = metaData.paymentId
     const contractTemplateHash = metaData.contractTemplateHash
     const paymentIdentityHDPublicKey = state.privateKey
-      .derive(paymentId)
+      .derive(paymentId, true)
       .hdPublicKey
     const paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
     const paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
@@ -98,7 +98,7 @@ const mutations = {
     const { paymentId, contractTemplateHash, signedContractHash } = metaData
     const paymentBaseRelativePathPath = contract.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
     const paymentAddressRelativePath = contract.derivePath(signedContractHash).substring(2) // remove m/ prefix
-    const paymentAddressAbsolutePath = `m/${paymentId}/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
+    const paymentAddressAbsolutePath = `m/${paymentId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
     const fileName = 'invoice-prv.json'
     const fileData = generateQRData({
