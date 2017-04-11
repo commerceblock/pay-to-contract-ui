@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Upload the signed contract files</label>
+      <label>Upload signed contract files</label>
       <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" />
     </div>
     <div v-if=erroResponse class="text-red">

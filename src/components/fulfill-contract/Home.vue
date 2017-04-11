@@ -35,7 +35,7 @@
       <div class="divider-vertical"></div>
       <div class="col-md-5"></div>
       <div class="input-group form-group" id="contractDropzoneSection">
-        <label>Upload the signed contract files</label>
+        <label>Upload signed contract files</label>
         <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" />
       </div>
       <div class='btn-toolbar'>
