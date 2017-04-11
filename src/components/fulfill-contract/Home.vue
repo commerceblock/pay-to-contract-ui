@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Upload the contract template files</label>
+      <label>Upload contract template files</label>
       <dropzone id="templateDropzone" url="/" v-on:vdropzone-file-added="templateFileAdded" v-on:vdropzone-removed-file="templateFileRemoved" />
     </div>
     <div v-if=erroResponse class="text-red">
@@ -107,7 +107,7 @@ export default {
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.templateFileHashes)
-      this.$parent.store.commit('GENERATE_INVOICE_DATA', {
+      this.$parent.store.commit('GENERATE_FULFILL_CONTRACT_MODAL_DATA', {
         signedContractHash,
         paymentBasePublicKey: this.paymentBasePublicKey
       })

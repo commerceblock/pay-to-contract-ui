@@ -49,7 +49,7 @@ export default {
   methods: {
     close: function () {
       this.$emit('close')
-      this.store.commit('CLEAR_INVOICE_REQUEST_DATA')
+      this.store.commit('CLEAR_FULFILL_CONTRACT_MODAL_DATA')
     }
   },
   computed: {

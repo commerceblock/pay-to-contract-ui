@@ -22,7 +22,7 @@
     <div class="ui form">
       <div class="input-group">
         <div class="form-group">
-          <label>Upload your files</label>
+          <label>Upload contract template files</label>
           <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" />
         </div>
       </div>
@@ -30,7 +30,7 @@
       <div class="input-group form-group">
         <label>Hash (SHA-512)</label>
         <div>
-          <input class="form-control contact-hash-input" readonly="readonly" type="text" v-model="contractHash" />
+          <input class="form-control contact-hash-input" readonly="readonly" type="text" v-model="contractTemplateHash" />
         </div>
       </div>
 
@@ -67,7 +67,7 @@ export default {
   data: function () {
     const data = {
       paymentId: null,
-      contractHash: null,
+      contractTemplateHash: null,
       fileHashes: [],
       showInvoiceRequest: false
     }
@@ -79,9 +79,9 @@ export default {
   },
   methods: {
     generate: function () {
-      this.$parent.store.commit('GENERATE_INVOICE_REQUEST_DATA', {
+      this.$parent.store.commit('GENERATE_CREATE_CONTRACT_MODAL_DATA', {
         paymentId: this.paymentId,
-        contractHash: this.contractHash
+        contractTemplateHash: this.contractTemplateHash
       })
       this.showInvoiceRequest = true
     },
@@ -104,7 +104,7 @@ export default {
       this.updateContractHash()
     },
     updateContractHash: function () {
-      this.contractHash = computeFilesHash(this.fileHashes)
+      this.contractTemplateHash = computeFilesHash(this.fileHashes)
     },
     closeInvoiceRequestModal: function () {
       this.showInvoiceRequest = false

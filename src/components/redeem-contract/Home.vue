@@ -75,7 +75,7 @@ export default {
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)
-      this.$parent.store.commit('GENERATE_REDEEM_CONTRACT_DATA', {
+      this.$parent.store.commit('GENERATE_REDEEM_CONTRACT_MODAL_DATA', {
         paymentId: this.paymentId,
         contractTemplateHash: this.contractTemplateHash,
         signedContractHash

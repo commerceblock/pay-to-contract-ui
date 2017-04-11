@@ -45,7 +45,7 @@ export default {
   methods: {
     close: function () {
       this.$emit('close')
-      this.store.commit('CLEAR_REDEEM_CONTRACT_DATA')
+      this.store.commit('CLEAR_REDEEM_CONTRACT_MODAL_DATA')
     }
   },
   computed: {

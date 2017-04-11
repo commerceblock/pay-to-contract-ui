@@ -32,9 +32,9 @@ const mutations = {
   SET_PRIVATE_KEY (state, privateKey) {
     state.privateKey = privateKey
   },
-  GENERATE_INVOICE_REQUEST_DATA (state, metaData) {
+  GENERATE_CREATE_CONTRACT_MODAL_DATA (state, metaData) {
     const paymentId = metaData.paymentId
-    const contractHash = metaData.contractHash
+    const contractTemplateHash = metaData.contractTemplateHash
     const paymentIdentityHDPublicKey = state.privateKey
       .derive(paymentId)
       .hdPublicKey
@@ -42,16 +42,16 @@ const mutations = {
     const paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
       .toAddress()
       .toString()
-    const paymentBasePath = contract.derivePath(contractHash)
+    const paymentBasePath = contract.derivePath(contractTemplateHash)
     const paymentBaseHDPublicKey = paymentIdentityHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
     const paymentBaseAddress = paymentBaseHDPublicKey.publicKey
       .toAddress()
       .toString()
-    const invoiceRequestFileName = 'invoice-request.json'
+    const invoiceRequestFileName = 'invoice-template.json'
     const invoiceRequestFileData = generateQRData({
       payment_id: paymentId,
-      contract_hash: contractHash,
+      contract_template_hash: contractTemplateHash,
       payment_identity_public_key: paymentIdentityPublicKey,
       payment_identity_address: paymentIdentityAddress,
       payment_base_public_key: paymentBasePublicKey,
@@ -59,7 +59,7 @@ const mutations = {
     })
     state.invoiceRequestData = {
       paymentId,
-      contractHash,
+      contractHash: contractTemplateHash,
       paymentIdentityPublicKey,
       paymentBasePublicKey,
       paymentBaseAddress,
@@ -67,10 +67,10 @@ const mutations = {
       invoiceRequestFileName
     }
   },
-  CLEAR_INVOICE_REQUEST_DATA (state) {
+  CLEAR_CREATE_CONTRACT_MODAL_DATA (state) {
     state.invoiceRequestData = null
   },
-  GENERATE_INVOICE_DATA (state, metaData) {
+  GENERATE_FULFILL_CONTRACT_MODAL_DATA (state, metaData) {
     const { signedContractHash, paymentBasePublicKey } = metaData
     const paymentAddressPath = contract.derivePath(signedContractHash)
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
@@ -91,10 +91,10 @@ const mutations = {
       invoiceFileData
     }
   },
-  CLEAR_INVOICE_DATA (state) {
+  CLEAR_FULFILL_CONTRACT_MODAL_DATA (state) {
     state.invoiceData = null
   },
-  GENERATE_REDEEM_CONTRACT_DATA (state, metaData) {
+  GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { paymentId, contractTemplateHash, signedContractHash } = metaData
     const paymentBaseRelativePathPath = contract.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
     const paymentAddressRelativePath = contract.derivePath(signedContractHash).substring(2) // remove m/ prefix
@@ -104,7 +104,7 @@ const mutations = {
       paymentAddressPrivateKey
     }
   },
-  CLEAR_REDEEM_CONTRACT_DATA (state) {
+  CLEAR_REDEEM_CONTRACT_MODAL_DATA (state) {
     state.redeemContractData = null
   }
 }
