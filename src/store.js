@@ -71,9 +71,8 @@ const mutations = {
     state.invoiceRequestData = null
   },
   GENERATE_INVOICE_DATA (state, metaData) {
-    const signedContractHash = metaData.signedContractHash
+    const { signedContractHash, paymentBasePublicKey } = metaData
     const paymentAddressPath = contract.derivePath(signedContractHash)
-    const paymentBasePublicKey = metaData.paymentBasePublicKey
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
     const paymentAddressHDPublicKey = paymentBaseHDPublicKey.derive(paymentAddressPath)
     const paymentAddressPublicKey = paymentAddressHDPublicKey.publicKey.toString()
@@ -94,13 +93,27 @@ const mutations = {
   },
   CLEAR_INVOICE_DATA (state) {
     state.invoiceData = null
+  },
+  GENERATE_REDEEM_CONTRACT_DATA (state, metaData) {
+    const { paymentId, contractTemplateHash, signedContractHash } = metaData
+    const paymentBaseRelativePathPath = contract.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
+    const paymentAddressRelativePath = contract.derivePath(signedContractHash).substring(2) // remove m/ prefix
+    const paymentAddressAbsolutePath = `m/${paymentId}/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
+    const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
+    state.redeemContractData = {
+      paymentAddressPrivateKey
+    }
+  },
+  CLEAR_REDEEM_CONTRACT_DATA (state) {
+    state.redeemContractData = null
   }
 }
 
 const getters = {
   privateKey: (state) => state.privateKey,
   invoiceRequestData: (state) => state.invoiceRequestData,
-  invoiceData: (state) => state.invoiceData
+  invoiceData: (state) => state.invoiceData,
+  redeemContractData: (state) => state.redeemContractData
 }
 
 export default new Vuex.Store({
