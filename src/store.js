@@ -100,8 +100,14 @@ const mutations = {
     const paymentAddressRelativePath = contract.derivePath(signedContractHash).substring(2) // remove m/ prefix
     const paymentAddressAbsolutePath = `m/${paymentId}/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
+    const fileName = 'invoice-prv.json'
+    const fileData = generateQRData({
+      payment_address_private_key: paymentAddressPrivateKey
+    })
     state.redeemContractData = {
-      paymentAddressPrivateKey
+      paymentAddressPrivateKey,
+      fileName,
+      fileData
     }
   },
   CLEAR_REDEEM_CONTRACT_MODAL_DATA (state) {

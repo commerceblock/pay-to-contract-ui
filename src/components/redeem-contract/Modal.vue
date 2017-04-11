@@ -7,19 +7,19 @@
         <div class="modal-content invoice-modal-container">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-            <h4 class="modal-title">Invoice</h4>
+            <h4 class="modal-title">Redeem Invoice</h4>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label>Payment Address</label>
+              <label>Payment Address - Private Key</label>
               <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPrivateKey" />
               <div>
-                <qrcode :cls="'invoice-qr'" value="paymentAddressAddress" />
+                <qrcode :cls="'invoice-qr'" value="paymentAddressPrivateKey" />
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <a :href="invoiceFileData" :download="invoiceFileName">
+            <a :href="fileData" :download="fileName">
               <button type="button" class="btn btn-primary">Export</button>
             </a>
             <button type="button" class="btn btn-primary" @click="close">Close</button>
@@ -57,6 +57,12 @@ export default {
     },
     paymentAddressPrivateKey: function () {
       return this.redeemContractData.paymentAddressPrivateKey
+    },
+    fileName: function () {
+      return this.redeemContractData.fileName
+    },
+    fileData: function () {
+      return this.redeemContractData.fileData
     }
   }
 }
