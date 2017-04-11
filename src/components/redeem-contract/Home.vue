@@ -67,11 +67,11 @@ export default {
   },
   methods: {
     reset: function () {
-      this.showSignedContractSection = false
-      this.showModal = false
-      this.paymentIdentityPublicKey = null
-      this.paymentBasePublicKey = null
+      this.paymentId = null
+      this.contractTemplateHash = null
+      this.contractFileHashes = null
       this.erroResponse = null
+      this.showModal = false
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)
