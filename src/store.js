@@ -4,6 +4,7 @@ import Networks from 'bitcore-lib/lib/networks'
 import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
 import contract from 'pay-to-contract-lib/lib/contract'
 import { generateQRData } from './helpers'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -110,7 +111,8 @@ const mutations = {
     state.redeemContractData = null
   },
   LOGOUT (state) {
-    state = initialState()
+    const initial = initialState()
+    _.forOwn(initial, (val, key) => { state[key] = val })
   }
 }
 
