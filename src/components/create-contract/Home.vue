@@ -1,24 +1,19 @@
 <template>
 <section class='content'>
-
   <modal v-if="showInvoiceRequest" @close="closeInvoiceRequestModal" />
-
   <div class="row center-block">
     <h2>Fill in information</h2>
-
     <div class="input-group form-group">
       <div>Invoice contracts are created by uploading files and then generating hashes which are used as part of the payment address.</div>
       <div>Payment address can be used by customer to validate associated data (uploaded files) with the derived address.</div>
       <div>By generating this payment address you are associate the files with the derived address.</div>
     </div>
-
     <div class="input-group form-group">
       <label>Payment Id</label>
       <div>
         <input class="form-control payment-id-input" readonly="readonly" type="text" v-model="paymentId" />
       </div>
     </div>
-
     <div class="ui form">
       <div class="input-group">
         <div class="form-group">
@@ -26,21 +21,22 @@
           <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" />
         </div>
       </div>
-
       <div class="input-group form-group">
         <label>Hash (SHA-512)</label>
         <div>
           <input class="form-control contact-hash-input" readonly="readonly" type="text" v-model="contractTemplateHash" />
         </div>
       </div>
-
-      <div >
-        <button class='btn btn-primary btn-lg' v-on:click='generate'>Generate</button>
+      <div class='btn-toolbar'>
+        <div class="btn-group" role="group">
+          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='generate'>Generate</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button class='btn btn-primary btn-lg forms-buttons' v-on:click='reset'>Reset</button>
+        </div>
       </div>
     </div>
-
   </div>
-
 </section>
 </template>
 
@@ -65,19 +61,28 @@ export default {
     Modal
   },
   data: function () {
-    const data = {
+    return {
       paymentId: null,
       contractTemplateHash: null,
       fileHashes: [],
       showInvoiceRequest: false
     }
-    const randomId = randomNumber(1000000, 5000000)
-    randomId
-      .then((number) => { data.paymentId = number })
-      .catch((err) => { console.log('Failed to create random id', err) })
-    return data
   },
   methods: {
+    generatePaymentId: function () {
+      const that = this
+      const randomId = randomNumber(1000000, 5000000)
+      randomId
+        .then((number) => { that.paymentId = number })
+        .catch((err) => { console.log('Failed to generate payment id', err) })
+    },
+    reset: function () {
+      this.paymentId = null
+      this.contractTemplateHash = null
+      this.fileHashes = []
+      this.showInvoiceRequest = false
+      this.generatePaymentId()
+    },
     generate: function () {
       this.$parent.store.commit('GENERATE_CREATE_CONTRACT_MODAL_DATA', {
         paymentId: this.paymentId,
@@ -109,6 +114,9 @@ export default {
     closeInvoiceRequestModal: function () {
       this.showInvoiceRequest = false
     }
+  },
+  mounted: function () {
+    this.generatePaymentId()
   }
 }
 </script>
