@@ -41,6 +41,7 @@ import {
   computeFileHash,
   computeFilesHash
 } from '../../helpers'
+import _ from 'lodash'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -72,6 +73,7 @@ export default {
       this.contractFileHashes = null
       this.erroResponse = null
       this.showModal = false
+      _.find(this.$children, { id: 'contractDropzone' }).removeAllFiles()
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)

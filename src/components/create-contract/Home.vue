@@ -45,6 +45,7 @@ import Dropzone from 'vue2-dropzone'
 import randomNumber from 'random-number-csprng'
 import { computeFilesHash, computeFileHash } from '../../helpers'
 import Modal from './Modal.vue'
+import _ from 'lodash'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -82,6 +83,7 @@ export default {
       this.fileHashes = []
       this.showInvoiceRequest = false
       this.generatePaymentId()
+      _.find(this.$children, { id: 'mainDropzone' }).removeAllFiles()
     },
     generate: function () {
       this.$parent.store.commit('GENERATE_CREATE_CONTRACT_MODAL_DATA', {

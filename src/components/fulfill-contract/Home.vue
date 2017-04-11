@@ -57,6 +57,7 @@ import {
   validatePaymentBase,
   computeFilesHash
 } from '../../helpers'
+import _ from 'lodash'
 
 Dropzone.props.autoProcessQueue = {
   type: Boolean,
@@ -104,6 +105,8 @@ export default {
       this.paymentIdentityPublicKey = null
       this.paymentBasePublicKey = null
       this.erroResponse = null
+      _.find(this.$children, { id: 'templateDropzone' }).removeAllFiles()
+      _.find(this.$children, { id: 'contractDropzone' }).removeAllFiles()
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.templateFileHashes)
