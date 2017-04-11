@@ -14,8 +14,6 @@
         </div>
       </a>
 
-
-
       <!-- Header Navbar -->
       <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
@@ -23,6 +21,14 @@
           <span class="sr-only">Toggle navigation</span>
         </a>
 
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav logout-button">
+            <button type="button" class="btn btn-default" v-on:click="signout">
+              <span class="fa fa-sign-out"></span> Log out
+            </button>
+          </ul>
+        </div>
       </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
@@ -87,14 +93,6 @@ export default {
   data: function () {
     return {
       section: 'Home',
-      me: '',
-      error: '',
-      api: {
-        servers: {
-          url: '', // Back end server
-          result: []
-        }
-      },
       showLoginModal: true
     }
   },
@@ -105,24 +103,22 @@ export default {
     state: function () {
       return this.store.state
     },
-    callAPI: function () {
-      return this.$parent.callAPI
-    },
     year: function () {
       var y = new Date()
       return y.getFullYear()
     }
   },
   methods: {
-    changeloading: function () {
-      this.store.commit('TOGGLE_SEARCHING')
-    },
     toggleMenu: function (event) {
       // remove active from li
       window.$('li.pageLink').removeClass('active')
 
       // Add it to the item that was clicked
       event.toElement.parentElement.className = 'pageLink active'
+    },
+    signout: function () {
+      this.store.commit('LOGOUT')
+      this.showLoginModal = true
     }
   },
   mounted: function () {
@@ -140,5 +136,10 @@ hr.visible-xs-block {
   background-color: rgba(0, 0, 0, 0.17);
   height: 1px;
   border-color: transparent;
+}
+
+.logout-button {
+  margin-top: 5px;
+  margin-right: 5px;
 }
 </style>

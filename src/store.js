@@ -7,23 +7,19 @@ import { generateQRData } from './helpers'
 
 Vue.use(Vuex)
 
-const state = {
-  callingAPI: false,
-  searching: '',
-  serverURI: 'http://10.110.1.136:8080',
-  privateKey: null,
-  network: null,
-  invoiceRequestData: null,
-  invoiceData: null
+function initialState () {
+  return {
+    privateKey: null,
+    network: null,
+    invoiceRequestData: null,
+    invoiceData: null,
+    redeemContractData: null
+  }
 }
 
+const state = initialState()
+
 const mutations = {
-  TOGGLE_LOADING (state) {
-    state.callingAPI = !state.callingAPI
-  },
-  TOGGLE_SEARCHING (state) {
-    state.searching = (state.searching === '') ? 'loading' : ''
-  },
   SET_NETWORK_TYPE (state, network) {
     state.network = network
     Networks.defaultNetwork = Networks[network]
@@ -112,6 +108,9 @@ const mutations = {
   },
   CLEAR_REDEEM_CONTRACT_MODAL_DATA (state) {
     state.redeemContractData = null
+  },
+  LOGOUT (state) {
+    state = initialState()
   }
 }
 
