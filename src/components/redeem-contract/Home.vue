@@ -17,7 +17,7 @@
     </div>
     <div class="input-group form-group">
       <label>Upload signed contract files</label>
-      <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" />
+      <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" autoProcessQueue="false" />
     </div>
     <div v-if=erroResponse class="text-red">
       <p>{{erroResponse}}</p>
@@ -42,14 +42,6 @@ import {
   computeFilesHash
 } from '../../helpers'
 import _ from 'lodash'
-
-Dropzone.props.autoProcessQueue = {
-  type: Boolean,
-  required: false,
-  default: function () {
-    return false
-  }
-}
 
 export default {
   name: 'MainApp',

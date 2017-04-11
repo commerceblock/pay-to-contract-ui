@@ -18,7 +18,7 @@
       <div class="input-group">
         <div class="form-group">
           <label>Upload contract template files</label>
-          <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" />
+          <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" autoProcessQueue="false" />
         </div>
       </div>
       <div class="input-group form-group">
@@ -46,14 +46,6 @@ import randomNumber from 'random-number-csprng'
 import { computeFilesHash, computeFileHash } from '../../helpers'
 import Modal from './Modal.vue'
 import _ from 'lodash'
-
-Dropzone.props.autoProcessQueue = {
-  type: Boolean,
-  required: false,
-  default: function () {
-    return false
-  }
-}
 
 export default {
   name: 'MainApp',
