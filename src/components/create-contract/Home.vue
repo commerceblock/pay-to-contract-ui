@@ -18,7 +18,7 @@
       <div class="input-group">
         <div class="form-group">
           <label>Upload contract template files</label>
-          <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" :autoProcessQueue=false />
+          <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" :autoProcessQueue=false :maxNumberOfFiles=2 />
         </div>
       </div>
       <div class="input-group form-group">
@@ -43,9 +43,13 @@
 <script>
 import Dropzone from 'vue2-dropzone'
 import randomNumber from 'random-number-csprng'
-import { computeFilesHash, computeFileHash } from '../../helpers'
 import Modal from './Modal.vue'
 import _ from 'lodash'
+import {
+  computeFilesHash,
+  computeFileHash,
+  disableDropzoneOnMaxfilesExceeded
+} from '../../helpers'
 
 export default {
   name: 'MainApp',
@@ -111,6 +115,8 @@ export default {
   },
   mounted: function () {
     this.generatePaymentId()
+    const dropzoneComponent = _.find(this.$children, { id: 'mainDropzone' })
+    disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
   }
 }
 </script>

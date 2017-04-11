@@ -39,7 +39,8 @@ import Dropzone from 'vue2-dropzone'
 import Modal from './Modal.vue'
 import {
   computeFileHash,
-  computeFilesHash
+  computeFilesHash,
+  disableDropzoneOnMaxfilesExceeded
 } from '../../helpers'
 import _ from 'lodash'
 
@@ -94,6 +95,11 @@ export default {
     },
     closeInvoiceModal: function () {
       this.showModal = false
+    },
+    mounted: function () {
+      this.generatePaymentId()
+      const dropzoneComponent = _.find(this.$children, { id: 'contractDropzone' })
+      disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
     }
   }
 }

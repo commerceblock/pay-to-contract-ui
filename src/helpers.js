@@ -60,3 +60,11 @@ const readAsText = exports.readAsText = function (file) {
     reader.readAsText(file)
   })
 }
+
+// workaround to prevent dragging or dropping of files on max file count
+// based on https://www.bountysource.com/issues/1444818-prevent-dragging-dropping-of-files-on-max-file-count
+exports.disableDropzoneOnMaxfilesExceeded = function (dropzone) {
+  dropzone.on('maxfilesexceeded', function (file) {
+    dropzone.removeFile(file)
+  })
+}
