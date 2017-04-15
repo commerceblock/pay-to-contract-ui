@@ -61,9 +61,6 @@ export default {
   components: {
     Qrcode
   },
-  data: function () {
-    return {}
-  },
   methods: {
     close: function () {
       this.$emit('close')
