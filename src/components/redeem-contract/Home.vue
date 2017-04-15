@@ -45,7 +45,7 @@ import {
 import _ from 'lodash'
 
 export default {
-  name: 'MainApp',
+  name: 'RedeemContractHome',
   components: {
     Dropzone,
     Modal

@@ -42,7 +42,7 @@
 import Qrcode from 'v-qrcode'
 
 export default {
-  name: 'InvoiceRequestModal',
+  name: 'RedeemContractModal',
   components: {
     Qrcode
   },

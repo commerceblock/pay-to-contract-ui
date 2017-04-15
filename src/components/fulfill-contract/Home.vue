@@ -61,7 +61,7 @@ import {
 import _ from 'lodash'
 
 export default {
-  name: 'MainApp',
+  name: 'FulfillContractHome',
   components: {
     Dropzone,
     Modal

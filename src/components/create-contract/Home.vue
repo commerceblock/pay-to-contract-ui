@@ -52,7 +52,7 @@ import {
 } from '../../helpers'
 
 export default {
-  name: 'MainApp',
+  name: 'CreateContractHome',
   components: {
     Dropzone,
     Modal
