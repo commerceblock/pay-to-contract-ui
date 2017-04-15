@@ -80,7 +80,6 @@ export default {
     contractFileAdded: function (file) {
       const that = this
       updateFileHashes(file, that.contractFileHashes)
-        .then(() => that.updateContractHash())
     },
     contractFileRemoved: function (file, error, xhr) {
       delete this.contractFileHashes[file.name]
