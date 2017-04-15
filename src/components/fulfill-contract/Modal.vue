@@ -1,34 +1,41 @@
 <template>
 <transition name="modal">
-  <div class="invoice-modal-mask">
-    <div class="invoice-modal-wrapper modal">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content invoice-modal-container">
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container">
+
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-            <h4 class="modal-title">Invoice</h4>
+            <slot name="header">
+              <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
+              <h4 class="modal-title">Invoice</h4>
+            </slot>
           </div>
+
           <div class="modal-body">
-            <div class="form-group">
-              <label>Singed Contract Hash</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="signedContractHash" />
-            </div>
-            <div class="form-group">
-              <label>Payment Address</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPublicKey" />
-              <div>
-                <qrcode :cls="'invoice-qr'" value="paymentAddressAddress" />
+            <slot name="body">
+              <div class="form-group">
+                <label>Singed Contract Hash</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="signedContractHash" />
               </div>
-            </div>
+              <div class="form-group">
+                <label>Payment Address</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPublicKey" />
+                <div>
+                  <qrcode :cls="'qr-container'" value="paymentAddressAddress" />
+                </div>
+              </div>
+            </slot>
           </div>
+
           <div class="modal-footer">
-            <a :href="invoiceFileData" :download="invoiceFileName">
-              <button type="button" class="btn btn-primary">Export</button>
-            </a>
-            <button type="button" class="btn btn-primary" @click="close">Close</button>
+            <slot name="footer">
+              <a :href="invoiceFileData" :download="invoiceFileName">
+                <button type="button" class="btn btn-primary">Export</button>
+              </a>
+              <button type="button" class="btn btn-primary" @click="close">Close</button>
+            </slot>
           </div>
-        </div>
+
       </div>
     </div>
   </div>
@@ -79,13 +86,7 @@ export default {
 </script>
 
 <style scoped>
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
-
-.invoice-button {
-  width: 90px
-}
-
-.invoice-modal-mask {
+.modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -97,26 +98,34 @@ export default {
   transition: opacity .3s ease;
 }
 
-.invoice-modal-wrapper {
-  display: table-cell;
+.modal-wrapper {
   vertical-align: middle;
+  margin-top: 40px;
 }
 
-.invoice-modal-container {
+.modal-container {
   width: 800px;
-  height: 420px;
+  height: 480px;
   margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.invoice-modal-header h3 {
+.modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
 
-.invoice-modal-body {
+.modal-body {
   margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
 }
 
 /*
@@ -127,22 +136,21 @@ export default {
  * You can easily play with the modal transition by editing
  * these styles.
  */
-
-.invoice-modal-enter {
+.modal-enter {
   opacity: 0;
 }
 
-.invoice-modal-leave-active {
+.modal-leave-active {
   opacity: 0;
 }
 
-.invoice-modal-enter .invoice-modal-container,
-.invoice-modal-leave-active .invoice-modal-container {
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
 
-.invoice-qr {
+.qr-container {
   margin: 10px 10px 0px 0px
 }
 </style>
