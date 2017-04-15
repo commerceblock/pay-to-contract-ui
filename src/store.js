@@ -12,9 +12,9 @@ function initialState () {
   return {
     privateKey: null,
     network: null,
-    invoiceRequestData: null,
-    invoiceData: null,
-    redeemContractData: null
+    invoiceRequestData: {},
+    invoiceData: {},
+    redeemContractData: {}
   }
 }
 
@@ -65,7 +65,7 @@ const mutations = {
     }
   },
   CLEAR_CREATE_CONTRACT_MODAL_DATA (state) {
-    state.invoiceRequestData = null
+    state.invoiceRequestData = {}
   },
   GENERATE_FULFILL_CONTRACT_MODAL_DATA (state, metaData) {
     const { signedContractHash, paymentBasePublicKey } = metaData
@@ -89,7 +89,7 @@ const mutations = {
     }
   },
   CLEAR_FULFILL_CONTRACT_MODAL_DATA (state) {
-    state.invoiceData = null
+    state.invoiceData = {}
   },
   GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { paymentId, contractTemplateHash, signedContractHash } = metaData
@@ -108,7 +108,7 @@ const mutations = {
     }
   },
   CLEAR_REDEEM_CONTRACT_MODAL_DATA (state) {
-    state.redeemContractData = null
+    state.redeemContractData = {}
   },
   LOGOUT (state) {
     const initial = initialState()
