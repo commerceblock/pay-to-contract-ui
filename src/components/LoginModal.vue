@@ -22,7 +22,7 @@
           <div class="input-group">
             <div class="text-center">
               <label>
-                <bootstrap-toggle v-model="isMainet" :options="{ on: 'Mainet', off: 'Testnet' }"/>
+                <bootstrap-toggle v-model="networkType" :options="{ on: 'Mainet', off: 'Testnet' }"/>
               </label>
             </div>
           </div>
@@ -48,7 +48,7 @@ export default {
   components: { BootstrapToggle },
   data: function () {
     return {
-      isMainet: true,
+      networkType: true,
       privateKeySeed: '',
       erroResponse: ''
     }
@@ -57,10 +57,7 @@ export default {
     login: function (event) {
       this.erroResponse = ''
 
-      const network = this.isMainet ? 'livenet' : 'testnet'
-
       // validate key
-
       const privateKeySeed = this.privateKeySeed.trim()
 
       if (_.isNull(this.privateKeySeed)) {
@@ -69,7 +66,6 @@ export default {
       }
 
       const length = privateKeySeed.split(' ').length
-
       if (length !== 12 && length !== 24) {
         this.erroResponse = 'Invalid seed, seed must be either 12 or 24 words.'
         return
@@ -80,13 +76,16 @@ export default {
         return
       }
 
+      const store = this.$parent.$store
+      // set network
+      const networkType = this.networkType === 'livenet' ? 'livenet' : 'testnet'
+      store.commit('SET_NETWORK_TYPE', networkType)
+      const network = store.getters.network
+      // set private key
       const code = new Mnemonic(privateKeySeed)
-      const privateKey = code.toHDPrivateKey()
+      const privateKey = code.toHDPrivateKey(null, network)
+      store.commit('SET_PRIVATE_KEY', privateKey)
 
-      this.$parent.$store.commit('SET_NETWORK_TYPE', network)
-      this.$parent.$store.commit('SET_PRIVATE_KEY', privateKey)
-
-      window.localStorage.setItem('privateKeySeed', this.privateKeySeed)
       this.$emit('close')
     }
   }

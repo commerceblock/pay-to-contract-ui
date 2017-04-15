@@ -21,10 +21,14 @@ function initialState () {
 const state = initialState()
 
 const mutations = {
-  SET_NETWORK_TYPE (state, network) {
-    state.network = network
-    Networks.defaultNetwork = Networks[network]
-    console.log('Default Network:' + Networks.defaultNetwork)
+  SET_NETWORK_TYPE (state, networkType) {
+    if (Networks[networkType] !== Networks.defaultNetwork) {
+      state.network = Networks[networkType]
+      Networks.defaultNetwork = Networks[networkType]
+    } else {
+      state.network = Networks.defaultNetwork
+    }
+    console.log('Active Network:' + Networks.defaultNetwork)
   },
   SET_PRIVATE_KEY (state, privateKey) {
     state.privateKey = privateKey
@@ -118,6 +122,7 @@ const mutations = {
 
 const getters = {
   privateKey: (state) => state.privateKey,
+  network: (state) => state.network,
   invoiceRequestData: (state) => state.invoiceRequestData,
   invoiceData: (state) => state.invoiceData,
   redeemContractData: (state) => state.redeemContractData
