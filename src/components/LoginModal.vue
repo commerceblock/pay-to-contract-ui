@@ -60,16 +60,27 @@ export default {
       const network = this.isMainet ? 'livenet' : 'testnet'
 
       // validate key
-      if (_.isNull(this.privateKeySeed) || _.isEmpty(this.privateKeySeed.trim())) {
+
+      const privateKeySeed = this.privateKeySeed.trim()
+
+      if (_.isNull(this.privateKeySeed)) {
         this.erroResponse = 'Seed is empty!'
         return
       }
-      if (!Mnemonic.isValid(this.privateKeySeed.trim())) {
+
+      const length = privateKeySeed.split(' ').length
+
+      if (length !== 12 && length !== 24) {
         this.erroResponse = 'Invalid seed, seed must be either 12 or 24 words.'
         return
       }
 
-      const code = new Mnemonic(this.privateKeySeed.trim())
+      if (!Mnemonic.isValid(privateKeySeed)) {
+        this.erroResponse = 'Invalid seed, seed must be either 12 or 24 words.'
+        return
+      }
+
+      const code = new Mnemonic(privateKeySeed)
       const privateKey = code.toHDPrivateKey()
 
       this.$parent.$store.commit('SET_NETWORK_TYPE', network)
