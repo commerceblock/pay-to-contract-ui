@@ -110,17 +110,13 @@ export default {
       this.showInvoice = true
     },
     templateFileAdded: function (file) {
-      const that = this
-      updateFileHashes(file, that.templateFileHashes)
-        .then(() => that.updateContractHash())
+      updateFileHashes(file, this.templateFileHashes)
     },
     templateFileRemoved: function (file, error, xhr) {
       delete this.templateFileHashes[file.name]
     },
     contractFileAdded: function (file) {
-      const that = this
-      updateFileHashes(file, that.contractFileHashes)
-        .then(() => that.updateContractHash())
+      updateFileHashes(file, this.contractFileHashes)
     },
     contractFileRemoved: function (file, error, xhr) {
       delete this.contractFileHashes[file.name]
@@ -129,8 +125,6 @@ export default {
       this.showInvoice = false
     },
     mounted: function () {
-      this.generatePaymentId()
-      // const ids = ['contractDropzone', 'templateDropzone']
       _.forEach(['contractDropzone', 'templateDropzone'], (id) => {
         const dropzoneComponent = _.find(this.$children, { id })
         disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
