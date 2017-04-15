@@ -25,7 +25,7 @@
               <div class="input-group">
                 <div class="text-center">
                   <label>
-                      <bootstrap-toggle v-model="networkType" :options="{ on: 'Mainet', off: 'Testnet' }"/>
+                      <bootstrap-toggle v-model="isMainet" :options="{ on: 'Mainet', off: 'Testnet' }"/>
                     </label>
                 </div>
               </div>
@@ -56,7 +56,7 @@ export default {
   components: { BootstrapToggle },
   data: function () {
     return {
-      networkType: true,
+      isMainet: true,
       privateKeySeed: '',
       erroResponse: ''
     }
@@ -86,7 +86,7 @@ export default {
 
       const store = this.$parent.$store
       // set network
-      const networkType = this.networkType === 'livenet' ? 'livenet' : 'testnet'
+      const networkType = this.isMainet ? 'livenet' : 'testnet'
       store.commit('SET_NETWORK_TYPE', networkType)
       const network = store.getters.network
       // set private key
