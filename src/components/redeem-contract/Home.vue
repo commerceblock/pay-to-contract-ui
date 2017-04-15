@@ -38,9 +38,9 @@
 import Dropzone from 'vue2-dropzone'
 import Modal from './Modal.vue'
 import {
-  computeFileHash,
   computeFilesHash,
-  disableDropzoneOnMaxfilesExceeded
+  disableDropzoneOnMaxfilesExceeded,
+  updateFileHashes
 } from '../../helpers'
 import _ from 'lodash'
 
@@ -79,16 +79,8 @@ export default {
     },
     contractFileAdded: function (file) {
       const that = this
-      that.contractFileHashes[file.name] = {
-        status: 'initial'
-      }
-      computeFileHash(file)
-        .then((fileHash) => {
-          that.contractFileHashes[file.name] = {
-            status: 'digested',
-            fileHash: fileHash
-          }
-        })
+      updateFileHashes(file, that.contractFileHashes)
+        .then(() => that.updateContractHash())
     },
     contractFileRemoved: function (file, error, xhr) {
       delete this.contractFileHashes[file.name]

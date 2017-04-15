@@ -47,8 +47,8 @@ import Modal from './Modal.vue'
 import _ from 'lodash'
 import {
   computeFilesHash,
-  computeFileHash,
-  disableDropzoneOnMaxfilesExceeded
+  disableDropzoneOnMaxfilesExceeded,
+  updateFileHashes
 } from '../../helpers'
 
 export default {
@@ -90,21 +90,8 @@ export default {
     },
     fileAdded: function (file) {
       const that = this
-      that.fileHashes[file.name] = {
-        status: 'initial'
-      }
-      computeFileHash(file)
-        .then((fileHash) => {
-          const fileHashHolder = that.fileHashes[file.name]
-          if (fileHashHolder) {
-            // Only updates if holder exists, this could be null
-            // if the file removed manually or automaically
-            // if the user exceeded the max number of files
-            fileHashHolder.status = 'digested'
-            fileHashHolder.fileHash = fileHash
-            that.updateContractHash()
-          }
-        })
+      updateFileHashes(file, that.fileHashes)
+        .then(() => that.updateContractHash())
     },
     fileRemoved: function (file, error, xhr) {
       delete this.fileHashes[file.name]
