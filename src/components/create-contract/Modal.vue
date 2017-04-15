@@ -122,7 +122,7 @@ export default {
 
 .invoice-request-modal-container {
   width: 800px;
-  height: 700px;
+  height: 690px;
   margin: 0px auto;
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;

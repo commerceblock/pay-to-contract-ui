@@ -104,7 +104,7 @@ export default {
 
 .invoice-modal-container {
   width: 800px;
-  height: 500px;
+  height: 420px;
   margin: 0px auto;
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
