@@ -1,36 +1,44 @@
 <template>
 <transition name="modal">
-  <div class="login-modal-mask">
-    <div class="login-modal-wrapper">
-      <div class="login-modal-container">
-
-        <div v-if=erroResponse class="text-red"><p>{{erroResponse}}</p></div>
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container">
 
         <form class="ui form loginForm" @submit.prevent="login">
 
-          <h2 class="text-center">Login</h2>
-
-          <div class="input-group">
-            <p>Welcome! Please keep your seed safe. <a href="https://iancoleman.github.io/bip39/" target="_blank">Generate sample seeds</a></p>
+          <div class="modal-header">
+            <slot name="header">
+              <div v-if=erroResponse class="text-red">
+                <p>{{erroResponse}}</p>
+              </div>
+              <h2 class="text-center">Login</h2>
+            </slot>
           </div>
 
-          <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-            <textarea class="form-control span6 prvKey" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
+          <div class="modal-body">
+            <slot name="body">
+              <p>Welcome! Please keep your seed safe. <a href="https://iancoleman.github.io/bip39/" target="_blank">Generate sample seeds</a></p>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <textarea class="form-control span6 prvKey" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
+              </div>
+              <div class="input-group">
+                <div class="text-center">
+                  <label>
+                      <bootstrap-toggle v-model="networkType" :options="{ on: 'Mainet', off: 'Testnet' }"/>
+                    </label>
+                </div>
+              </div>
+            </slot>
           </div>
 
-          <div class="input-group">
-            <div class="text-center">
-              <label>
-                <bootstrap-toggle v-model="networkType" :options="{ on: 'Mainet', off: 'Testnet' }"/>
-              </label>
-            </div>
+          <div class="modal-footer">
+            <slot name="footer">
+              <div class="text-center col-md-4 col-sm-offset-4">
+                <button class="modal-default-button button-center btn btn-primary btn-lg" type="submit">Sign in</button>
+              </div>
+            </slot>
           </div>
-
-          <div class="text-center col-md-4 col-sm-offset-4">
-            <button class="button-center btn btn-primary btn-lg" type="submit">Sign in</button>
-          </div>
-
         </form>
       </div>
     </div>
@@ -92,12 +100,8 @@ export default {
 }
 </script>
 
-<style>
-.prvKey {
-  resize: none;
-}
-
-.login-modal-mask {
+<style scoped>
+.modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -109,14 +113,14 @@ export default {
   transition: opacity .3s ease;
 }
 
-.login-modal-wrapper {
+.modal-wrapper {
   display: table-cell;
   vertical-align: middle;
 }
 
-.login-modal-container {
+.modal-container {
   width: 650px;
-  height: 350px;
+  height: 440px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -126,15 +130,18 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.login-modal-header h3 {
+.modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
 
-.login-modal-body {
+.modal-body {
   margin: 20px 0;
 }
 
+.modal-default-button {
+  float: right;
+}
 
 /*
  * The following styles are auto-applied to elements with
@@ -144,17 +151,16 @@ export default {
  * You can easily play with the modal transition by editing
  * these styles.
  */
-
-.login-modal-enter {
+.modal-enter {
   opacity: 0;
 }
 
-.login-modal-leave-active {
+.modal-leave-active {
   opacity: 0;
 }
 
-.login-modal-enter .login-modal-container,
-.login-modal-leave-active .login-modal-container {
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
@@ -163,6 +169,7 @@ export default {
   padding-bottom: 1em;
   height: 4em;
 }
+
 .input-group input {
   height: 4em;
 }
