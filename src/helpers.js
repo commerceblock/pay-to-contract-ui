@@ -88,7 +88,7 @@ exports.generateQRData = function (data) {
   const encodedData = encodeURIComponent(JSON.stringify(data, null, 2))
   return `data:text/json;charset=utf-8,${encodedData}`
 }
-// workaround to prevent dragging or dropping of files on max file count
+// workaround to prevent dragging or dropping of files when max file count reached
 // based on https://www.bountysource.com/issues/1444818-prevent-dragging-dropping-of-files-on-max-file-count
 exports.disableDropzoneOnMaxfilesExceeded = function (dropzone) {
   dropzone.on('maxfilesexceeded', function (file) {
