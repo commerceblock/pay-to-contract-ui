@@ -11,7 +11,7 @@
           <h2 class="text-center">Login</h2>
 
           <div class="input-group">
-            <p>Welcome!  Please keep your seed safe. <a href="https://iancoleman.github.io/bip39/" target="_blank">Generate sample seeds</a></p>
+            <p>Welcome! Please keep your seed safe. <a href="https://iancoleman.github.io/bip39/" target="_blank">Generate sample seeds</a></p>
           </div>
 
           <div class="input-group">
