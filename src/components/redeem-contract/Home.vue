@@ -78,8 +78,7 @@ export default {
       this.showModal = true
     },
     contractFileAdded: function (file) {
-      const that = this
-      updateFileHashes(file, that.contractFileHashes)
+      updateFileHashes(file, this.contractFileHashes)
     },
     contractFileRemoved: function (file, error, xhr) {
       delete this.contractFileHashes[file.name]
@@ -88,7 +87,6 @@ export default {
       this.showModal = false
     },
     mounted: function () {
-      this.generatePaymentId()
       const dropzoneComponent = _.find(this.$children, { id: 'contractDropzone' })
       disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
     }
