@@ -1,46 +1,52 @@
 <template>
 <transition name="modal">
-  <div class="invoice-request-modal-mask">
-    <div class="invoice-request-modal-wrapper modal">
-      <div class="modal-dialog">
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container">
 
-        <!-- Modal content-->
-        <div class="modal-content invoice-request-modal-container">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-            <h4 class="modal-title">Invoice Request</h4>
+            <slot name="header">
+              <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
+              <h4 class="modal-title">Invoice Request</h4>
+            </slot>
           </div>
+
           <div class="modal-body">
-            <div class="form-group">
-              <label>Payment Id</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentId" />
-            </div>
-            <div class="form-group">
-              <label>Contract Hash</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
-            </div>
-            <div class="form-group">
-              <label>Payment Identity</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
-              <div>
-                <qrcode :cls="'invoice-request-qr'" value="paymentIdentityAddress" />
+            <slot name="body">
+              <div class="form-group">
+                <label>Payment Id</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="paymentId" />
               </div>
-            </div>
-            <div class="form-group">
-              <label>Payment Base</label>
-              <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
-              <div>
-                <qrcode :cls="'invoice-request-qr'" value="paymentBaseAddress" />
+              <div class="form-group">
+                <label>Contract Hash</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
               </div>
-            </div>
+              <div class="form-group">
+                <label>Payment Identity</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
+                <div>
+                  <qrcode :cls="'qr-container'" value="paymentIdentityAddress" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Payment Base</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
+                <div>
+                  <qrcode :cls="'qr-container'" value="paymentBaseAddress" />
+                </div>
+              </div>
+            </slot>
           </div>
+
           <div class="modal-footer">
-            <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
-              <button type="button" class="btn btn-primary">Export</button>
-            </a>
-            <button type="button" class="btn btn-primary" @click="close">Close</button>
+            <slot name="footer">
+              <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
+                <button type="button" class="btn btn-primary">Export</button>
+              </a>
+              <button type="button" class="btn btn-primary" @click="close">Close</button>
+            </slot>
           </div>
-        </div>
+
       </div>
     </div>
   </div>
@@ -97,13 +103,7 @@ export default {
 </script>
 
 <style scoped>
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
-
-.invoice-request-button {
-  width: 90px
-}
-
-.invoice-request-modal-mask {
+.modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -115,29 +115,36 @@ export default {
   transition: opacity .3s ease;
 }
 
-.invoice-request-modal-wrapper {
-  display: table-cell;
+.modal-wrapper {
+  /*display: table-cell;*/
   vertical-align: middle;
+  margin-top: 40px;
 }
 
-.invoice-request-modal-container {
+.modal-container {
   width: 800px;
-  height: 690px;
+  height: 730px;
   margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.invoice-request-modal-header h3 {
+.modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
 
-.invoice-request-modal-body {
+.modal-body {
   margin: 20px 0;
 }
 
-
+.modal-default-button {
+  float: right;
+}
 
 /*
  * The following styles are auto-applied to elements with
@@ -147,22 +154,21 @@ export default {
  * You can easily play with the modal transition by editing
  * these styles.
  */
-
-.invoice-request-modal-enter {
+.modal-enter {
   opacity: 0;
 }
 
-.invoice-request-modal-leave-active {
+.modal-leave-active {
   opacity: 0;
 }
 
-.invoice-request-modal-enter .invoice-request-modal-container,
-.invoice-request-modal-leave-active .invoice-request-modal-container {
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
 
-.invoice-request-qr {
+.qr-container {
   margin: 10px 10px 0px 0px
 }
 </style>
