@@ -39,11 +39,13 @@ const mutations = {
     const paymentIdentityHDPublicKey = state.privateKey
       .derive(paymentId, true)
       .hdPublicKey
+    console.log('paymentId: ' + paymentId)
     const paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
     const paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
       .toAddress()
       .toString()
     const paymentBasePath = contract.derivePath(contractTemplateHash)
+    console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = paymentIdentityHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
     const paymentBaseAddress = paymentBaseHDPublicKey.publicKey
@@ -75,6 +77,7 @@ const mutations = {
     const { signedContractHash, paymentBasePublicKey } = metaData
     const paymentAddressPath = contract.derivePath(signedContractHash)
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
+    console.log('paymentAddressPath: ' + paymentAddressPath)
     const paymentAddressHDPublicKey = paymentBaseHDPublicKey.derive(paymentAddressPath)
     const paymentAddressPublicKey = paymentAddressHDPublicKey.publicKey.toString()
     const paymentAddressAddress = paymentAddressHDPublicKey.publicKey.toAddress().toString()
@@ -97,8 +100,11 @@ const mutations = {
   },
   GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { paymentId, contractTemplateHash, signedContractHash } = metaData
+    console.log('paymentId: ' + paymentId)
     const paymentBaseRelativePathPath = contract.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
+    console.log('paymentBaseRelativePathPath: ' + paymentBaseRelativePathPath)
     const paymentAddressRelativePath = contract.derivePath(signedContractHash).substring(2) // remove m/ prefix
+    console.log('paymentAddressRelativePath: ' + paymentAddressRelativePath)
     const paymentAddressAbsolutePath = `m/${paymentId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
     const fileName = 'invoice-prv.json'
@@ -114,8 +120,10 @@ const mutations = {
   CLEAR_REDEEM_CONTRACT_MODAL_DATA (state) {
     state.redeemContractData = {}
   },
-  LOGOUT (state) {
+  RESET (state) {
     const initial = initialState()
+    // since state is a proxy (observer), we can't set state instance directly,
+    // rather we we should update properties by name
     _.forOwn(initial, (val, key) => { state[key] = val })
   }
 }

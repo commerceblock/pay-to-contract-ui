@@ -84,6 +84,7 @@
 
 <script>
 import LoginModal from './LoginModal.vue'
+import _ from 'lodash'
 
 export default {
   name: 'Home',
@@ -117,7 +118,14 @@ export default {
       event.toElement.parentElement.className = 'pageLink active'
     },
     signout: function () {
-      this.store.commit('LOGOUT')
+      // reset childs
+      _.forEach(this.$children, (child) => {
+        if (child.reset) {
+          child.reset()
+        }
+      })
+      // reset store
+      this.store.commit('RESET')
       this.showLoginModal = true
     }
   },
