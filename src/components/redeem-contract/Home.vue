@@ -17,7 +17,7 @@
     </div>
     <div class="input-group form-group">
       <label>Upload signed contract files</label>
-      <dropzone id="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" :autoProcessQueue=false />
+      <dropzone id="contractDropzone" ref="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" :autoProcessQueue=false />
     </div>
     <div v-if=erroResponse class="text-red">
       <p>{{erroResponse}}</p>
@@ -42,7 +42,6 @@ import {
   disableDropzoneOnMaxfilesExceeded,
   updateFileHashes
 } from '../../helpers'
-import _ from 'lodash'
 
 export default {
   name: 'RedeemContractHome',
@@ -66,7 +65,7 @@ export default {
       this.contractFileHashes = null
       this.erroResponse = null
       this.showModal = false
-      _.find(this.$children, { id: 'contractDropzone' }).removeAllFiles()
+      this.$refs.contractDropzone.dropzone.removeAllFiles()
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)
@@ -87,7 +86,7 @@ export default {
       this.showModal = false
     },
     mounted: function () {
-      const dropzoneComponent = _.find(this.$children, { id: 'contractDropzone' })
+      const dropzoneComponent = this.$refs.contractDropzone
       disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
     }
   }
