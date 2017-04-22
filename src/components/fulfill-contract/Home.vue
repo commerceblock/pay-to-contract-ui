@@ -102,7 +102,7 @@ export default {
       _.find(this.$children, { id: 'contractDropzone' }).removeAllFiles()
     },
     generate: function () {
-      const signedContractHash = computeFilesHash(this.templateFileHashes)
+      const signedContractHash = computeFilesHash(this.contractFileHashes)
       this.$parent.store.commit('GENERATE_FULFILL_CONTRACT_MODAL_DATA', {
         signedContractHash,
         paymentBasePublicKey: this.paymentBasePublicKey
