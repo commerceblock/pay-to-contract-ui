@@ -21,12 +21,6 @@
           <dropzone id="mainDropzone" url="/" v-on:vdropzone-file-added="fileAdded" v-on:vdropzone-removed-file="fileRemoved" :autoProcessQueue=false :maxNumberOfFiles=2 />
         </div>
       </div>
-      <div class="input-group form-group">
-        <label>Hash (SHA-512)</label>
-        <div>
-          <input class="form-control contact-hash-input" readonly="readonly" type="text" v-model="contractTemplateHash" />
-        </div>
-      </div>
       <div class='btn-toolbar'>
         <div class="btn-group" role="group">
           <button class='btn btn-primary btn-lg forms-buttons' v-on:click='generate'>Generate</button>
@@ -60,7 +54,6 @@ export default {
   data: function () {
     return {
       paymentId: null,
-      contractTemplateHash: null,
       fileHashes: [],
       showInvoiceRequest: false
     }
@@ -75,30 +68,24 @@ export default {
     },
     reset: function () {
       this.paymentId = null
-      this.contractTemplateHash = null
       this.fileHashes = []
       this.showInvoiceRequest = false
       this.generatePaymentId()
-      _.find(this.$children, { id: 'mainDropzone' }).removeAllFiles()
+      _.find(this.$children, { id: 'mainDropzone' }).dropzone.removeAllFiles()
     },
     generate: function () {
+      const contractTemplateHash = computeFilesHash(this.fileHashes)
       this.$parent.store.commit('GENERATE_CREATE_CONTRACT_MODAL_DATA', {
         paymentId: this.paymentId,
-        contractTemplateHash: this.contractTemplateHash
+        contractTemplateHash
       })
       this.showInvoiceRequest = true
     },
     fileAdded: function (file) {
-      const that = this
-      updateFileHashes(file, that.fileHashes)
-        .then(() => that.updateContractHash())
+      updateFileHashes(file, this.fileHashes)
     },
     fileRemoved: function (file, error, xhr) {
       delete this.fileHashes[file.name]
-      this.updateContractHash()
-    },
-    updateContractHash: function () {
-      this.contractTemplateHash = computeFilesHash(this.fileHashes)
     },
     closeInvoiceRequestModal: function () {
       this.showInvoiceRequest = false
