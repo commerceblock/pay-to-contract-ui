@@ -123,7 +123,7 @@ const mutations = {
   RESET (state) {
     const initial = initialState()
     // since state is a proxy (observer), we can't set state instance directly,
-    // rather we we should update properties by name
+    // rather we should update properties by name
     _.forOwn(initial, (val, key) => { state[key] = val })
   }
 }
