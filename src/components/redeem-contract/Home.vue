@@ -6,13 +6,13 @@
     <div class="input-group form-group">
       <label>Payment Id</label>
       <div>
-        <input class="form-control public-key-input" type="text" v-model="paymentId" placeholder="Insert the payment id" />
+        <input class="form-control public-key-input" type="text" v-model="paymentId" placeholder="Insert payment id" />
       </div>
     </div>
     <div class="input-group form-group">
       <label>Contract Template Hash</label>
       <div>
-        <input class="form-control public-key-input" type="text" v-model="contractTemplateHash" placeholder="Insert the contract template hash" />
+        <input class="form-control public-key-input" type="text" v-model="contractTemplateHash" placeholder="Insert contract template hash" />
       </div>
     </div>
     <div class="input-group form-group">

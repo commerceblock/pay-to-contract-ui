@@ -4,15 +4,15 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
     <div class="input-group form-group">
-      <label>Payment Identity Public Key</label>
+      <label>Payment Id Public Key</label>
       <div>
-        <input class="form-control public-key-input" type="text" v-model="paymentIdentityPublicKey" placeholder="Insert the Payment Identity Public Key" />
+        <input class="form-control public-key-input" type="text" v-model="paymentIdPublicKey" placeholder="Insert payment id public key" />
       </div>
     </div>
     <div class="input-group form-group">
       <label>Payment Base Public Key</label>
       <div>
-        <input class="form-control public-key-input" type="text" v-model="paymentBasePublicKey" placeholder="Insert the Payment Base Public Key" />
+        <input class="form-control public-key-input" type="text" v-model="paymentBasePublicKey" placeholder="Insert payment base public key" />
       </div>
     </div>
     <div class="input-group form-group">
@@ -68,7 +68,7 @@ export default {
   },
   data: function () {
     return {
-      paymentIdentityPublicKey: null,
+      paymentIdPublicKey: null,
       paymentBasePublicKey: null,
       templateFileHashes: [],
       contractFileHashes: [],
@@ -80,7 +80,7 @@ export default {
   methods: {
     validate: function () {
       const contractTemplateHash = computeFilesHash(this.templateFileHashes)
-      const error = validatePaymentBase(this.paymentIdentityPublicKey, this.paymentBasePublicKey, contractTemplateHash)
+      const error = validatePaymentBase(this.paymentIdPublicKey, this.paymentBasePublicKey, contractTemplateHash)
       if (error) {
         this.erroResponse = error
       } else {
@@ -95,7 +95,7 @@ export default {
     reset: function () {
       this.showSignedContractSection = false
       this.showInvoice = false
-      this.paymentIdentityPublicKey = null
+      this.paymentIdPublicKey = null
       this.paymentBasePublicKey = null
       this.erroResponse = null
       this.$refs.templateDropzone.dropzone.removeAllFiles()
