@@ -4,6 +4,13 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
     <div class="input-group form-group">
+      <div>Upload contract file or fill in contract keys</div>
+      <input type="file" id="contractFile" accept="application/json" ref="contractFile" @change="processFile($event)">
+      <div v-if=contractFileErroResponse class="text-red">
+        <p>{{contractFileErroResponse}}</p>
+      </div>
+    </div>
+    <div class="input-group form-group">
       <label>Payment Id Public Key</label>
       <div>
         <input class="form-control public-key-input" type="text" v-model="paymentIdPublicKey" placeholder="Insert payment id public key" />
@@ -56,7 +63,8 @@ import {
   validatePaymentBase,
   computeFilesHash,
   disableDropzoneOnMaxfilesExceeded,
-  updateFileHashes
+  updateFileHashes,
+  readAsText
 } from '../../helpers'
 import _ from 'lodash'
 
@@ -73,6 +81,7 @@ export default {
       templateFileHashes: [],
       contractFileHashes: [],
       erroResponse: null,
+      contractFileErroResponse: null,
       showSignedContractSection: false,
       showInvoice: false
     }
@@ -98,8 +107,12 @@ export default {
       this.paymentIdPublicKey = null
       this.paymentBasePublicKey = null
       this.erroResponse = null
+      this.contractFileErroResponse = null
+      this.$refs.contractFile.value = null
       this.$refs.templateDropzone.dropzone.removeAllFiles()
-      this.$refs.contractDropzone.dropzone.removeAllFiles()
+      if (this.$refs.contractDropzone) {
+        this.$refs.contractDropzone.dropzone.removeAllFiles()
+      }
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)
@@ -123,6 +136,27 @@ export default {
     },
     closeInvoiceModal: function () {
       this.showInvoice = false
+    },
+    processFile: function (event) {
+      // reset error message
+      this.contractFileErroResponse = null
+      const fileContentPromise = readAsText(event.target.files[0])
+      const that = this
+      fileContentPromise
+        .then(content => {
+          const contractDef = JSON.parse(content)
+          if (contractDef.payment_identity_public_key && contractDef.payment_base_public_key) {
+            that.paymentIdPublicKey = contractDef.payment_identity_public_key
+            that.paymentBasePublicKey = contractDef.payment_base_public_key
+          } else {
+            // invalid file
+            that.contractFileErroResponse = 'Invalid contract file, please try another file.'
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          that.contractFileErroResponse = 'Invalid contract file, please try another file.'
+        })
     },
     mounted: function () {
       _.forEach(['contractDropzone', 'templateDropzone'], (id) => {

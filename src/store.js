@@ -45,10 +45,15 @@ const mutations = {
     console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = paymentIdentityHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
-    const invoiceRequestFileName = 'invoice-template.json'
-    const invoiceRequestFileData = generateFileData({
+    const invoiceMerchantFileName = 'invoice-merchant.json'
+    const invoiceMerchantFileData = generateFileData({
       payment_id: paymentId,
       contract_hash: contractHash,
+      payment_identity_public_key: paymentIdentityPublicKey,
+      payment_base_public_key: paymentBasePublicKey
+    })
+    const invoiceCustomerFileName = 'invoice-customer.json'
+    const invoiceCustomerFileData = generateFileData({
       payment_identity_public_key: paymentIdentityPublicKey,
       payment_base_public_key: paymentBasePublicKey
     })
@@ -57,8 +62,10 @@ const mutations = {
       contractHash,
       paymentIdentityPublicKey,
       paymentBasePublicKey,
-      invoiceRequestFileData,
-      invoiceRequestFileName
+      invoiceMerchantFileData,
+      invoiceMerchantFileName,
+      invoiceCustomerFileData,
+      invoiceCustomerFileName
     }
   },
   CLEAR_CREATE_CONTRACT_MODAL_DATA (state) {
@@ -66,22 +73,18 @@ const mutations = {
   },
   GENERATE_FULFILL_CONTRACT_MODAL_DATA (state, metaData) {
     const { signedContractHash, paymentBasePublicKey } = metaData
-    const paymentAddressPath = contractUtil.derivePath(signedContractHash)
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
-    console.log('paymentAddressPath: ' + paymentAddressPath)
-    const paymentAddressHDPublicKey = paymentBaseHDPublicKey.derive(paymentAddressPath)
-    const paymentAddressPublicKey = paymentAddressHDPublicKey.publicKey.toString()
-    const paymentAddressAddress = paymentAddressHDPublicKey.publicKey.toAddress().toString()
+    const paymentAddressPath = contractUtil.derivePath(signedContractHash)
+    const address = paymentBaseHDPublicKey.derive(paymentAddressPath)
+      .publicKey
+      .toAddress()
+      .toString()
     const invoiceFileName = 'invoice.json'
     const invoiceFileData = generateFileData({
-      signed_contract_hash: signedContractHash,
-      paymentAddressPublicKey: paymentAddressPublicKey,
-      paymentAddressAddress: paymentAddressAddress
+      address
     })
     state.invoiceData = {
-      signedContractHash,
-      paymentAddressPublicKey,
-      paymentAddressAddress,
+      address,
       invoiceFileName,
       invoiceFileData
     }

@@ -34,8 +34,11 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <a :href="invoiceRequestFileData" :download="invoiceRequestFileName">
-                <button type="button" class="btn btn-primary">Export</button>
+              <a :href="invoiceMerchantFileData" :download="invoiceMerchantFileName">
+                <button type="button" class="btn btn-primary">Export Merchant Data</button>
+              </a>
+              <a :href="invoiceCustomerFileData" :download="invoiceCustomerFileName">
+                <button type="button" class="btn btn-primary">Export Customer Data</button>
               </a>
               <button type="button" class="btn btn-primary" @click="close">Close</button>
             </slot>
@@ -76,11 +79,17 @@ export default {
     paymentBasePublicKey: function () {
       return this.invoiceRequestData.paymentBasePublicKey
     },
-    invoiceRequestFileData: function () {
-      return this.invoiceRequestData.invoiceRequestFileData
+    invoiceMerchantFileData: function () {
+      return this.invoiceRequestData.invoiceMerchantFileData
     },
-    invoiceRequestFileName: function () {
-      return this.invoiceRequestData.invoiceRequestFileName
+    invoiceMerchantFileName: function () {
+      return this.invoiceRequestData.invoiceMerchantFileName
+    },
+    invoiceCustomerFileData: function () {
+      return this.invoiceRequestData.invoiceCustomerFileData
+    },
+    invoiceCustomerFileName: function () {
+      return this.invoiceRequestData.invoiceCustomerFileName
     }
   }
 }

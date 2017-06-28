@@ -3,39 +3,31 @@
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container">
-
-          <div class="modal-header">
-            <slot name="header">
-              <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-              <h4 class="modal-title">Invoice</h4>
-            </slot>
-          </div>
-
-          <div class="modal-body">
-            <slot name="body">
-              <div class="form-group">
-                <label>Singed Contract Hash</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="signedContractHash" />
+        <div class="modal-header">
+          <slot name="header">
+            <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
+            <h4 class="modal-title">Invoice</h4>
+          </slot>
+        </div>
+        <div class="modal-body">
+          <slot name="body">
+            <div class="form-group">
+              <label>Payment Address</label>
+              <input class="form-control" readonly="readonly" type="text" v-model="address" />
+              <div>
+                <qrcode :cls="'qr-container'" :value="this.address" />
               </div>
-              <div class="form-group">
-                <label>Payment Address</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPublicKey" />
-                <div>
-                  <qrcode :cls="'qr-container'" value="paymentAddressAddress" />
-                </div>
-              </div>
-            </slot>
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer">
-              <a :href="invoiceFileData" :download="invoiceFileName">
+            </div>
+          </slot>
+        </div>
+        <div class="modal-footer">
+          <slot name="footer">
+            <a :href="invoiceFileData" :download="invoiceFileName">
                 <button type="button" class="btn btn-primary">Export</button>
               </a>
-              <button type="button" class="btn btn-primary" @click="close">Close</button>
-            </slot>
-          </div>
-
+            <button type="button" class="btn btn-primary" @click="close">Close</button>
+          </slot>
+        </div>
       </div>
     </div>
   </div>
@@ -56,6 +48,9 @@ export default {
       this.store.commit('CLEAR_FULFILL_CONTRACT_MODAL_DATA')
     }
   },
+  data: function () {
+    return {}
+  },
   computed: {
     store: function () {
       return this.$parent.$store
@@ -63,14 +58,8 @@ export default {
     invoiceData: function () {
       return this.store.getters.invoiceData
     },
-    signedContractHash: function () {
-      return this.invoiceData.signedContractHash
-    },
-    paymentAddressPublicKey: function () {
-      return this.invoiceData.paymentAddressPublicKey
-    },
-    paymentAddressAddress: function () {
-      return this.invoiceData.paymentAddressAddress
+    address: function () {
+      return this.invoiceData.address
     },
     invoiceFileName: function () {
       return this.invoiceData.invoiceFileName
@@ -133,6 +122,7 @@ export default {
  * You can easily play with the modal transition by editing
  * these styles.
  */
+
 .modal-enter {
   opacity: 0;
 }
