@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import Networks from 'bitcore-lib/lib/networks'
 import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
 import contract from 'pay-to-contract-lib/lib/contract'
-import { generateQRData } from './helpers'
+import { generateFileData } from './helpers'
 import _ from 'lodash'
 
 Vue.use(Vuex)
@@ -52,7 +52,7 @@ const mutations = {
       .toAddress()
       .toString()
     const invoiceRequestFileName = 'invoice-template.json'
-    const invoiceRequestFileData = generateQRData({
+    const invoiceRequestFileData = generateFileData({
       payment_id: paymentId,
       contract_template_hash: contractTemplateHash,
       payment_identity_public_key: paymentIdentityPublicKey,
@@ -82,7 +82,7 @@ const mutations = {
     const paymentAddressPublicKey = paymentAddressHDPublicKey.publicKey.toString()
     const paymentAddressAddress = paymentAddressHDPublicKey.publicKey.toAddress().toString()
     const invoiceFileName = 'invoice.json'
-    const invoiceFileData = generateQRData({
+    const invoiceFileData = generateFileData({
       signed_contract_hash: signedContractHash,
       paymentAddressPublicKey: paymentAddressPublicKey,
       paymentAddressAddress: paymentAddressAddress
@@ -108,7 +108,7 @@ const mutations = {
     const paymentAddressAbsolutePath = `m/${paymentId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
     const fileName = 'invoice-prv.json'
-    const fileData = generateQRData({
+    const fileData = generateFileData({
       payment_address_private_key: paymentAddressPrivateKey
     })
     state.redeemContractData = {

@@ -84,7 +84,7 @@ exports.validatePaymentBase = function (paymentIdentityPublicKey, paymentBasePub
   }
 }
 
-exports.generateQRData = function (data) {
+exports.generateFileData = function (data) {
   const encodedData = encodeURIComponent(JSON.stringify(data, null, 2))
   return `data:text/json;charset=utf-8,${encodedData}`
 }
