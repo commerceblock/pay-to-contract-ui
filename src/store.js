@@ -103,9 +103,11 @@ const mutations = {
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
     const fileName = 'invoice-prv.json'
     const fileData = generateFileData({
+      payment_address_path: paymentAddressAbsolutePath,
       payment_address_private_key: paymentAddressPrivateKey
     })
     state.redeemContractData = {
+      paymentAddressAbsolutePath,
       paymentAddressPrivateKey,
       fileName,
       fileData

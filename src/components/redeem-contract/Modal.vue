@@ -16,6 +16,8 @@
               <div class="form-group">
                 <label>Payment Address - Private Key</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPrivateKey" />
+                <label>Payment Address - Absolute Path</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressAbsolutePath" />
                 <div>
                   <qrcode :cls="'qr-container'" value="paymentAddressPrivateKey" />
                 </div>
@@ -61,6 +63,9 @@ export default {
     },
     paymentAddressPrivateKey: function () {
       return this.redeemContractData.paymentAddressPrivateKey
+    },
+    paymentAddressAbsolutePath: function () {
+      return this.redeemContractData.paymentAddressAbsolutePath
     },
     fileName: function () {
       return this.redeemContractData.fileName
