@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Networks from 'bitcore-lib/lib/networks'
 import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
-import contract from 'pay-to-contract-lib/lib/contract'
+import contractUtil from 'pay-to-contract-lib/lib/contract'
 import { generateFileData } from './helpers'
 import _ from 'lodash'
 
@@ -41,7 +41,7 @@ const mutations = {
       .hdPublicKey
     console.log('paymentId: ' + paymentId)
     const paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
-    const paymentBasePath = contract.derivePath(contractHash)
+    const paymentBasePath = contractUtil.derivePath(contractHash)
     console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = paymentIdentityHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
@@ -66,7 +66,7 @@ const mutations = {
   },
   GENERATE_FULFILL_CONTRACT_MODAL_DATA (state, metaData) {
     const { signedContractHash, paymentBasePublicKey } = metaData
-    const paymentAddressPath = contract.derivePath(signedContractHash)
+    const paymentAddressPath = contractUtil.derivePath(signedContractHash)
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
     console.log('paymentAddressPath: ' + paymentAddressPath)
     const paymentAddressHDPublicKey = paymentBaseHDPublicKey.derive(paymentAddressPath)
@@ -92,9 +92,9 @@ const mutations = {
   GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { paymentId, contractTemplateHash, signedContractHash } = metaData
     console.log('paymentId: ' + paymentId)
-    const paymentBaseRelativePathPath = contract.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
+    const paymentBaseRelativePathPath = contractUtil.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
     console.log('paymentBaseRelativePathPath: ' + paymentBaseRelativePathPath)
-    const paymentAddressRelativePath = contract.derivePath(signedContractHash).substring(2) // remove m/ prefix
+    const paymentAddressRelativePath = contractUtil.derivePath(signedContractHash).substring(2) // remove m/ prefix
     console.log('paymentAddressRelativePath: ' + paymentAddressRelativePath)
     const paymentAddressAbsolutePath = `m/${paymentId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
