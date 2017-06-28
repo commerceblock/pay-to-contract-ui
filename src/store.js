@@ -35,37 +35,28 @@ const mutations = {
   },
   GENERATE_CREATE_CONTRACT_MODAL_DATA (state, metaData) {
     const paymentId = metaData.paymentId
-    const contractTemplateHash = metaData.contractTemplateHash
+    const contractHash = metaData.contractTemplateHash
     const paymentIdentityHDPublicKey = state.privateKey
       .derive(paymentId, true)
       .hdPublicKey
     console.log('paymentId: ' + paymentId)
     const paymentIdentityPublicKey = paymentIdentityHDPublicKey.toString()
-    const paymentIdentityAddress = paymentIdentityHDPublicKey.publicKey
-      .toAddress()
-      .toString()
-    const paymentBasePath = contract.derivePath(contractTemplateHash)
+    const paymentBasePath = contract.derivePath(contractHash)
     console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = paymentIdentityHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
-    const paymentBaseAddress = paymentBaseHDPublicKey.publicKey
-      .toAddress()
-      .toString()
     const invoiceRequestFileName = 'invoice-template.json'
     const invoiceRequestFileData = generateFileData({
       payment_id: paymentId,
-      contract_template_hash: contractTemplateHash,
+      contract_hash: contractHash,
       payment_identity_public_key: paymentIdentityPublicKey,
-      payment_identity_address: paymentIdentityAddress,
-      payment_base_public_key: paymentBasePublicKey,
-      payment_base_address: paymentBaseAddress
+      payment_base_public_key: paymentBasePublicKey
     })
     state.invoiceRequestData = {
       paymentId,
-      contractHash: contractTemplateHash,
+      contractHash,
       paymentIdentityPublicKey,
       paymentBasePublicKey,
-      paymentBaseAddress,
       invoiceRequestFileData,
       invoiceRequestFileName
     }

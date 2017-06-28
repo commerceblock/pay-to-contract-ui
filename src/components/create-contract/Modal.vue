@@ -24,16 +24,10 @@
               <div class="form-group">
                 <label>Payment Identity</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
-                <div>
-                  <qrcode :cls="'qr-container'" value="paymentIdentityAddress" />
-                </div>
               </div>
               <div class="form-group">
                 <label>Payment Base</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
-                <div>
-                  <qrcode :cls="'qr-container'" value="paymentBaseAddress" />
-                </div>
               </div>
             </slot>
           </div>
@@ -54,13 +48,9 @@
 </template>
 
 <script>
-import Qrcode from 'v-qrcode'
-
 export default {
   name: 'CreateContractModal',
-  components: {
-    Qrcode
-  },
+  components: {},
   methods: {
     close: function () {
       this.$emit('close')
@@ -85,9 +75,6 @@ export default {
     },
     paymentBasePublicKey: function () {
       return this.invoiceRequestData.paymentBasePublicKey
-    },
-    paymentBaseAddress: function () {
-      return this.invoiceRequestData.paymentBaseAddress
     },
     invoiceRequestFileData: function () {
       return this.invoiceRequestData.invoiceRequestFileData
