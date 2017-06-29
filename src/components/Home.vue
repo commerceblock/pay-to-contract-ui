@@ -54,10 +54,6 @@
           <li class="active pageLink" v-on:click="toggleMenu"><router-link to="/"><i class="fa fa-paperclip"></i><span class="page">Create Contract</span></router-link></li>
           <li class="pageLink" v-on:click="toggleMenu"><router-link to="/fulfill"><i class="fa fa-file-text-o"></i><span class="page">Fulfill Contract</span></router-link></li>
           <li class="pageLink" v-on:click="toggleMenu"><router-link to="/redeem"><i class="fa fa-bitcoin"></i><span class="page">Redeem Contract</span></router-link></li>
-          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/create-escrow"><i class="fa fa-balance-scale"></i><span class="page">Create Escrow</span></router-link></li>
-          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/complete-escrow"><i class="fa fa-balance-scale"></i><span class="page">Complete Escrow</span></router-link></li>
-          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/dispute-escrow"><i class="fa fa-balance-scale"></i><span class="page">Dispute Escrow</span></router-link></li>
-          <li class="pageLink" v-on:click="toggleMenu"><router-link to="/hedge"><i class="fa fa-sun-o"></i><span class="page">Create Hedge</span></router-link></li>
         </ul>
         <!-- /.sidebar-menu -->
       </section>
