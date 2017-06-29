@@ -18,9 +18,6 @@
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPrivateKey" />
                 <label>Payment Address - Absolute Path</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressAbsolutePath" />
-                <div>
-                  <qrcode :cls="'qr-container'" value="paymentAddressPrivateKey" />
-                </div>
               </div>
             </slot>
           </div>
@@ -41,12 +38,9 @@
 </template>
 
 <script>
-import Qrcode from 'v-qrcode'
-
 export default {
   name: 'RedeemContractModal',
   components: {
-    Qrcode
   },
   methods: {
     close: function () {
@@ -97,7 +91,7 @@ export default {
 
 .modal-container {
   width: 800px;
-  height: 400px;
+  height: 350px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
