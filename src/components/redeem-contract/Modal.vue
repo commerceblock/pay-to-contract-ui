@@ -135,8 +135,4 @@ export default {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-
-.qr-container {
-  margin: 10px 10px 0px 0px
-}
 </style>
