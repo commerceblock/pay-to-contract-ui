@@ -100,7 +100,7 @@ const mutations = {
     const paymentAddressRelativePath = contractUtil.derivePath(signedContractHash).substring(2) // remove m/ prefix
     console.log('paymentAddressRelativePath: ' + paymentAddressRelativePath)
     const paymentAddressAbsolutePath = `m/${paymentId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
-    const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).privateKey.toWIF()
+    const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).toString()
     const fileName = 'invoice-prv.json'
     const fileData = generateFileData({
       payment_address_path: paymentAddressAbsolutePath,
