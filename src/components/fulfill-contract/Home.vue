@@ -4,7 +4,7 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
     <div class="input-group form-group">
-      <div>Upload contract file or fill in contract keys</div>
+      <div>Upload contract file or fill in contract keys.</div>
       <input type="file" id="contractFile" accept="application/json" ref="contractFile" @change="processFile($event)">
       <div v-if=contractFileErroResponse class="text-red">
         <p>{{contractFileErroResponse}}</p>

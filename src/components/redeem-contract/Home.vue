@@ -4,6 +4,13 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
     <div class="input-group form-group">
+      <div>Upload contract file or fill in contract details.</div>
+      <input type="file" id="contractFile" accept="application/json" ref="contractFile" @change="processFile($event)">
+      <div v-if=contractFileErroResponse class="text-red">
+        <p>{{contractFileErroResponse}}</p>
+      </div>
+    </div>
+    <div class="input-group form-group">
       <label>Payment Id</label>
       <div>
         <input class="form-control public-key-input" type="text" v-model="paymentId" placeholder="Insert payment id" />
@@ -40,7 +47,8 @@ import Modal from './Modal.vue'
 import {
   computeFilesHash,
   disableDropzoneOnMaxfilesExceeded,
-  updateFileHashes
+  updateFileHashes,
+  readAsText
 } from '../../helpers'
 
 export default {
@@ -55,6 +63,7 @@ export default {
       contractTemplateHash: null,
       contractFileHashes: [],
       erroResponse: null,
+      contractFileErroResponse: null,
       showModal: false
     }
   },
@@ -84,6 +93,27 @@ export default {
     },
     closeInvoiceModal: function () {
       this.showModal = false
+    },
+    processFile: function (event) {
+      // reset error message
+      this.contractFileErroResponse = null
+      const fileContentPromise = readAsText(event.target.files[0])
+      const that = this
+      fileContentPromise
+        .then(content => {
+          const contractDef = JSON.parse(content)
+          if (contractDef.payment_id && contractDef.contract_hash) {
+            that.paymentId = contractDef.payment_id
+            that.contractTemplateHash = contractDef.contract_hash
+          } else {
+            // invalid file
+            that.contractFileErroResponse = 'Invalid contract file, please try another file.'
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          that.contractFileErroResponse = 'Invalid contract file, please try another file.'
+        })
     },
     mounted: function () {
       const dropzoneComponent = this.$refs.contractDropzone

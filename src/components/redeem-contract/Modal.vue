@@ -16,7 +16,7 @@
               <div class="form-group">
                 <label>Payment Address - Private Key</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPrivateKey" />
-                <label>Payment Address - Absolute Path</label>
+                <label>Payment Address - BIP32 Derivation Path</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressAbsolutePath" />
               </div>
             </slot>
