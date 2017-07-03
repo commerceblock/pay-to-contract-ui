@@ -11,9 +11,9 @@
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Payment Id Public Key</label>
+      <label>Contract Id Public Key</label>
       <div>
-        <input class="form-control public-key-input" type="text" v-model="paymentIdPublicKey" placeholder="Insert payment id public key" />
+        <input class="form-control public-key-input" type="text" v-model="contractIdPublicKey" placeholder="Insert contract id public key" />
       </div>
     </div>
     <div class="input-group form-group">
@@ -76,7 +76,7 @@ export default {
   },
   data: function () {
     return {
-      paymentIdPublicKey: null,
+      contractIdPublicKey: null,
       paymentBasePublicKey: null,
       templateFileHashes: [],
       contractFileHashes: [],
@@ -89,7 +89,7 @@ export default {
   methods: {
     validate: function () {
       const contractTemplateHash = computeFilesHash(this.templateFileHashes)
-      const error = validatePaymentBase(this.paymentIdPublicKey, this.paymentBasePublicKey, contractTemplateHash)
+      const error = validatePaymentBase(this.contractIdPublicKey, this.paymentBasePublicKey, contractTemplateHash)
       if (error) {
         this.erroResponse = error
       } else {
@@ -104,7 +104,7 @@ export default {
     reset: function () {
       this.showSignedContractSection = false
       this.showInvoice = false
-      this.paymentIdPublicKey = null
+      this.contractIdPublicKey = null
       this.paymentBasePublicKey = null
       this.erroResponse = null
       this.contractFileErroResponse = null
@@ -145,8 +145,8 @@ export default {
       fileContentPromise
         .then(content => {
           const contractDef = JSON.parse(content)
-          if (contractDef.payment_identity_public_key && contractDef.payment_base_public_key) {
-            that.paymentIdPublicKey = contractDef.payment_identity_public_key
+          if (contractDef.contract_id_public_key && contractDef.payment_base_public_key) {
+            that.contractIdPublicKey = contractDef.contract_id_public_key
             that.paymentBasePublicKey = contractDef.payment_base_public_key
           } else {
             // invalid file

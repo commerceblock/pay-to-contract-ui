@@ -14,16 +14,16 @@
           <div class="modal-body">
             <slot name="body">
               <div class="form-group">
-                <label>Payment Id</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="paymentId" />
+                <label>Contract Id</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="contractId" />
               </div>
               <div class="form-group">
                 <label>Contract Hash</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
               </div>
               <div class="form-group">
-                <label>Payment Identity</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="paymentIdentityPublicKey" />
+                <label>Contract Id</label>
+                <input class="form-control" readonly="readonly" type="text" v-model="contractIdPublicKey" />
               </div>
               <div class="form-group">
                 <label>Payment Base</label>
@@ -67,14 +67,14 @@ export default {
     invoiceRequestData: function () {
       return this.store.getters.invoiceRequestData
     },
-    paymentId: function () {
-      return this.invoiceRequestData.paymentId
+    contractId: function () {
+      return this.invoiceRequestData.contractId
     },
     contractHash: function () {
       return this.invoiceRequestData.contractHash
     },
-    paymentIdentityPublicKey: function () {
-      return this.invoiceRequestData.paymentIdentityPublicKey
+    contractIdPublicKey: function () {
+      return this.invoiceRequestData.contractIdPublicKey
     },
     paymentBasePublicKey: function () {
       return this.invoiceRequestData.paymentBasePublicKey

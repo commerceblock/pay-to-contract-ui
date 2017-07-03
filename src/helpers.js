@@ -71,10 +71,10 @@ exports.updateFileHashes = function (file, fileHashes) {
   }
 }
 
-exports.validatePaymentBase = function (paymentIdentityPublicKey, paymentBasePublicKey, contractTemplateHash) {
+exports.validatePaymentBase = function (contractIdPublicKey, paymentBasePublicKey, contractTemplateHash) {
   const paymentBasePath = contract.derivePath(contractTemplateHash)
-  const paymentIdentityHDPublicKey = new HDPublicKey(paymentIdentityPublicKey)
-  const actualPaymentBasePublicKey = paymentIdentityHDPublicKey
+  const contractIdHDPublicKey = new HDPublicKey(contractIdPublicKey)
+  const actualPaymentBasePublicKey = contractIdHDPublicKey
     .derive(paymentBasePath)
     .toString()
   if (actualPaymentBasePublicKey === paymentBasePublicKey) {

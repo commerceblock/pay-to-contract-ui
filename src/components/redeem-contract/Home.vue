@@ -11,9 +11,9 @@
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Payment Id</label>
+      <label>Contract Id</label>
       <div>
-        <input class="form-control public-key-input" type="text" v-model="paymentId" placeholder="Insert payment id" />
+        <input class="form-control public-key-input" type="text" v-model="contractId" placeholder="Insert contract id" />
       </div>
     </div>
     <div class="input-group form-group">
@@ -59,7 +59,7 @@ export default {
   },
   data: function () {
     return {
-      paymentId: null,
+      contractId: null,
       contractTemplateHash: null,
       contractFileHashes: [],
       erroResponse: null,
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     reset: function () {
-      this.paymentId = null
+      this.contractId = null
       this.contractTemplateHash = null
       this.contractFileHashes = null
       this.erroResponse = null
@@ -79,7 +79,7 @@ export default {
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)
       this.$parent.store.commit('GENERATE_REDEEM_CONTRACT_MODAL_DATA', {
-        paymentId: this.paymentId,
+        contractId: this.contractId,
         contractTemplateHash: this.contractTemplateHash,
         signedContractHash
       })
@@ -102,8 +102,8 @@ export default {
       fileContentPromise
         .then(content => {
           const contractDef = JSON.parse(content)
-          if (contractDef.payment_id && contractDef.contract_hash) {
-            that.paymentId = contractDef.payment_id
+          if (contractDef.contract_id && contractDef.contract_hash) {
+            that.contractId = contractDef.contract_id
             that.contractTemplateHash = contractDef.contract_hash
           } else {
             // invalid file

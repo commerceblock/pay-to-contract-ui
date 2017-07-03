@@ -9,9 +9,9 @@
       <div>By generating this payment address you are associate the files with the derived address.</div>
     </div>
     <div class="input-group form-group">
-      <label>Payment Id</label>
+      <label>Contract Id</label>
       <div>
-        <input class="form-control payment-id-input" readonly="readonly" type="text" v-model="paymentId" />
+        <input class="form-control contract-id-input" readonly="readonly" type="text" v-model="contractId" />
       </div>
     </div>
     <div class="ui form">
@@ -52,30 +52,30 @@ export default {
   },
   data: function () {
     return {
-      paymentId: null,
+      contractId: null,
       fileHashes: [],
       showInvoiceRequest: false
     }
   },
   methods: {
-    generatePaymentId: function () {
+    generatecontractId: function () {
       const that = this
       const randomId = randomNumber(1000000, 5000000)
       randomId
-        .then((number) => { that.paymentId = number })
-        .catch((err) => { console.log('Failed to generate payment id', err) })
+        .then((number) => { that.contractId = number })
+        .catch((err) => { console.log('Failed to generate contract id', err) })
     },
     reset: function () {
-      this.paymentId = null
+      this.contractId = null
       this.fileHashes = []
       this.showInvoiceRequest = false
-      this.generatePaymentId()
+      this.generatecontractId()
       this.$refs.templateDropzone.dropzone.removeAllFiles()
     },
     generate: function () {
       const contractTemplateHash = computeFilesHash(this.fileHashes)
       this.$parent.store.commit('GENERATE_CREATE_CONTRACT_MODAL_DATA', {
-        paymentId: this.paymentId,
+        contractId: this.contractId,
         contractTemplateHash
       })
       this.showInvoiceRequest = true
@@ -91,7 +91,7 @@ export default {
     }
   },
   mounted: function () {
-    this.generatePaymentId()
+    this.generatecontractId()
     const dropzoneComponent = this.$refs.templateDropzone
     disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
   }
@@ -111,7 +111,7 @@ export default {
   width: 950px;
 }
 
-.payment-id-input {
+.contract-id-input {
   width: 300px;
 }
 </style>
