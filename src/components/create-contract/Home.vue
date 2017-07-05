@@ -58,7 +58,7 @@ export default {
     }
   },
   methods: {
-    generatecontractId: function () {
+    generateContractId: function () {
       const that = this
       const randomId = randomNumber(1000000, 5000000)
       randomId
@@ -69,8 +69,10 @@ export default {
       this.contractId = null
       this.fileHashes = []
       this.showInvoiceRequest = false
-      this.generatecontractId()
-      this.$refs.templateDropzone.dropzone.removeAllFiles()
+      this.generateContractId()
+      if (this.$refs.templateDropzone) {
+        this.$refs.templateDropzone.dropzone.removeAllFiles()
+      }
     },
     generate: function () {
       const contractTemplateHash = computeFilesHash(this.fileHashes)
@@ -91,7 +93,7 @@ export default {
     }
   },
   mounted: function () {
-    this.generatecontractId()
+    this.generateContractId()
     const dropzoneComponent = this.$refs.templateDropzone
     disableDropzoneOnMaxfilesExceeded(dropzoneComponent.dropzone)
   }

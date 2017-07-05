@@ -108,8 +108,12 @@ export default {
       this.paymentBasePublicKey = null
       this.erroResponse = null
       this.contractFileErroResponse = null
-      this.$refs.contractFile.value = null
-      this.$refs.templateDropzone.dropzone.removeAllFiles()
+      if (this.$refs.contractFile) {
+        this.$refs.contractFile.value = null
+      }
+      if (this.$refs.templateDropzone) {
+        this.$refs.templateDropzone.dropzone.removeAllFiles()
+      }
       if (this.$refs.contractDropzone) {
         this.$refs.contractDropzone.dropzone.removeAllFiles()
       }

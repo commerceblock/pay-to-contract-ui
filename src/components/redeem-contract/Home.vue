@@ -74,7 +74,9 @@ export default {
       this.contractFileHashes = null
       this.erroResponse = null
       this.showModal = false
-      this.$refs.contractDropzone.dropzone.removeAllFiles()
+      if (this.$refs.contractDropzone) {
+        this.$refs.contractDropzone.dropzone.removeAllFiles()
+      }
     },
     generate: function () {
       const signedContractHash = computeFilesHash(this.contractFileHashes)
