@@ -45,15 +45,15 @@ const mutations = {
     console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = contractIdHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
-    const invoiceMerchantFileName = 'invoice-merchant.json'
-    const invoiceMerchantFileData = generateFileData({
+    const invoiceSellerFileName = 'invoice-seller.json'
+    const invoiceSellerFileData = generateFileData({
       contract_id: contractId,
       contract_hash: contractHash,
       contract_id_public_key: contractIdPublicKey,
       payment_base_public_key: paymentBasePublicKey
     })
-    const invoiceCustomerFileName = 'invoice-customer.json'
-    const invoiceCustomerFileData = generateFileData({
+    const invoiceBuyerFileName = 'invoice-buyer.json'
+    const invoiceBuyerFileData = generateFileData({
       contract_id_public_key: contractIdPublicKey,
       payment_base_public_key: paymentBasePublicKey
     })
@@ -62,10 +62,10 @@ const mutations = {
       contractHash,
       contractIdPublicKey,
       paymentBasePublicKey,
-      invoiceMerchantFileData,
-      invoiceMerchantFileName,
-      invoiceCustomerFileData,
-      invoiceCustomerFileName
+      invoiceSellerFileData,
+      invoiceSellerFileName,
+      invoiceBuyerFileData,
+      invoiceBuyerFileName
     }
   },
   CLEAR_CREATE_CONTRACT_MODAL_DATA (state) {

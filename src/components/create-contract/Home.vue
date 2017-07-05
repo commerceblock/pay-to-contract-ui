@@ -4,9 +4,9 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
     <div class="input-group form-group">
-      <div>Invoice contracts are created by uploading files and then generating hashes which are used as part of the payment address.</div>
-      <div>Payment address can be used by customer to validate associated data (uploaded files) with the derived address.</div>
-      <div>By generating this payment address you are associate the files with the derived address.</div>
+      <div>Invoice contracts are created by uploading files and then generating hashes which are used as part of the addresses.</div>
+      <div>Public keys can be used by the buyer to validate associated data (uploaded files) with the derived addresses.</div>
+      <div>By generating these public keys you are associate the files with the derived addresses.</div>
     </div>
     <div class="input-group form-group">
       <label>Contract Id</label>
