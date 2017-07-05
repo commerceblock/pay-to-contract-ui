@@ -22,11 +22,11 @@
                 <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
               </div>
               <div class="form-group">
-                <label>Contract Id</label>
+                <label>Contract Id - Public Key</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="contractIdPublicKey" />
               </div>
               <div class="form-group">
-                <label>Payment Base</label>
+                <label>Payment Base - Public Key</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
               </div>
             </slot>
