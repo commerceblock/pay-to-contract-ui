@@ -2,9 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Networks from 'bitcore-lib/lib/networks'
 import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
-import contractUtil from 'pay-to-contract-lib/lib/contract'
+import { derivePath } from 'pay-to-contract-lib/lib/contract'
 import { generateFileData } from './helpers'
 import _ from 'lodash'
+
+// TODO: extract to pay-to-contract-lib m / purpose' / coin_type' / contract_id' / subcontract_ids
+const ADDRESS_BIP200_MAINNET_PREFIX = "m/200'/0'"
+const ADDRESS_BIP200_TESTNET_PREFIX = "m/200'/1'"
 
 Vue.use(Vuex)
 
@@ -19,6 +23,16 @@ function initialState () {
 }
 
 const state = initialState()
+
+const getAddressPrefix = () => {
+  if (state.network.name === 'mainnet' || state.network.alias === 'mainnet') {
+    return ADDRESS_BIP200_MAINNET_PREFIX
+  } else if (state.network.name === 'testnet') {
+    return ADDRESS_BIP200_TESTNET_PREFIX
+  } else {
+    throw new Error('Unsupported network ' + state.network)
+  }
+}
 
 const mutations = {
   SET_NETWORK_TYPE (state, networkType) {
@@ -36,12 +50,13 @@ const mutations = {
   GENERATE_CREATE_CONTRACT_MODAL_DATA (state, metaData) {
     const contractId = metaData.contractId
     const contractHash = metaData.contractTemplateHash
+    const contractIdPath = `${getAddressPrefix()}/${contractId}'`
     const contractIdHDPublicKey = state.privateKey
-      .derive(contractId, true)
+      .derive(contractIdPath)
       .hdPublicKey
-    console.log('contractId: ' + contractId)
+    console.log('contractIdPath: ' + contractIdPath)
     const contractIdPublicKey = contractIdHDPublicKey.toString()
-    const paymentBasePath = contractUtil.derivePath(contractHash)
+    const paymentBasePath = 'm/' + derivePath(contractHash)
     console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = contractIdHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
@@ -74,7 +89,7 @@ const mutations = {
   GENERATE_FULFILL_CONTRACT_MODAL_DATA (state, metaData) {
     const { signedContractHash, paymentBasePublicKey } = metaData
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
-    const paymentAddressPath = contractUtil.derivePath(signedContractHash)
+    const paymentAddressPath = `m/${derivePath(signedContractHash)}/0/0`
     const address = paymentBaseHDPublicKey.derive(paymentAddressPath)
       .publicKey
       .toAddress()
@@ -95,11 +110,11 @@ const mutations = {
   GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { contractId, contractTemplateHash, signedContractHash } = metaData
     console.log('contractId: ' + contractId)
-    const paymentBaseRelativePathPath = contractUtil.derivePath(contractTemplateHash).substring(2) // remove m/ prefix
+    const paymentBaseRelativePathPath = derivePath(contractTemplateHash)
     console.log('paymentBaseRelativePathPath: ' + paymentBaseRelativePathPath)
-    const paymentAddressRelativePath = contractUtil.derivePath(signedContractHash).substring(2) // remove m/ prefix
+    const paymentAddressRelativePath = derivePath(signedContractHash)
     console.log('paymentAddressRelativePath: ' + paymentAddressRelativePath)
-    const paymentAddressAbsolutePath = `m/${contractId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
+    const paymentAddressAbsolutePath = `${getAddressPrefix()}/${contractId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}/0/0`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).toString()
     const fileName = 'invoice-prv.json'
     const fileData = generateFileData({

@@ -86,7 +86,7 @@ export default {
 
       const store = this.$parent.$store
       // set network
-      const networkType = this.isMainet ? 'livenet' : 'testnet'
+      const networkType = this.isMainet ? 'mainnet' : 'testnet'
       store.commit('SET_NETWORK_TYPE', networkType)
       const network = store.getters.network
       // set private key

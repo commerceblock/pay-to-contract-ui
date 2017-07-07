@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import crypto from 'crypto'
-import contract from 'pay-to-contract-lib/lib/contract'
 import HDPublicKey from 'bitcore-lib/lib/hdpublickey'
+import { derivePath } from 'pay-to-contract-lib/lib/contract'
 
 // 5MB
 const MAX_ALLOWED_FILE_SIZE_IN_BYTES = 5 * 1024 * 1024
@@ -72,7 +72,7 @@ exports.updateFileHashes = function (file, fileHashes) {
 }
 
 exports.validatePaymentBase = function (contractIdPublicKey, paymentBasePublicKey, contractTemplateHash) {
-  const paymentBasePath = contract.derivePath(contractTemplateHash)
+  const paymentBasePath = 'm/' + derivePath(contractTemplateHash)
   const contractIdHDPublicKey = new HDPublicKey(contractIdPublicKey)
   const actualPaymentBasePublicKey = contractIdHDPublicKey
     .derive(paymentBasePath)

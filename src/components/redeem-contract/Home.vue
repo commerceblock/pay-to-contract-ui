@@ -74,6 +74,9 @@ export default {
       this.contractFileHashes = null
       this.erroResponse = null
       this.showModal = false
+      if (this.$refs.contractFile) {
+        this.$refs.contractFile.value = null
+      }
       if (this.$refs.contractDropzone) {
         this.$refs.contractDropzone.dropzone.removeAllFiles()
       }
