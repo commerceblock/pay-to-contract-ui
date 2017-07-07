@@ -14,8 +14,6 @@
           <div class="modal-body">
             <slot name="body">
               <div class="form-group">
-                <label>Payment Address - Private Key</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressPrivateKey" />
                 <label>Payment Address - BIP32 Derivation Path</label>
                 <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressAbsolutePath" />
               </div>

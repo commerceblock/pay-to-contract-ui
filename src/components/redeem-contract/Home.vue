@@ -11,18 +11,6 @@
       </div>
     </div>
     <div class="input-group form-group">
-      <label>Contract Id</label>
-      <div>
-        <input class="form-control public-key-input" type="text" v-model="contractId" placeholder="Insert contract id" />
-      </div>
-    </div>
-    <div class="input-group form-group">
-      <label>Contract Template Hash</label>
-      <div>
-        <input class="form-control public-key-input" type="text" v-model="contractTemplateHash" placeholder="Insert contract template hash" />
-      </div>
-    </div>
-    <div class="input-group form-group">
       <label>Upload signed contract files</label>
       <dropzone id="contractDropzone" ref="contractDropzone" url="/" v-on:vdropzone-file-added="contractFileAdded" v-on:vdropzone-removed-file="contractFileRemoved" :autoProcessQueue=false />
     </div>

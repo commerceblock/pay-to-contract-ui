@@ -4,22 +4,10 @@
   <div class="row center-block">
     <h2>Fill in information</h2>
     <div class="input-group form-group">
-      <div>Upload contract file or fill in contract keys.</div>
+      <div>Upload contract file.</div>
       <input type="file" id="contractFile" accept="application/json" ref="contractFile" @change="processFile($event)">
       <div v-if=contractFileErroResponse class="text-red">
         <p>{{contractFileErroResponse}}</p>
-      </div>
-    </div>
-    <div class="input-group form-group">
-      <label>Contract Id Public Key</label>
-      <div>
-        <input class="form-control public-key-input" type="text" v-model="contractIdPublicKey" placeholder="Insert contract id public key" />
-      </div>
-    </div>
-    <div class="input-group form-group">
-      <label>Payment Base Public Key</label>
-      <div>
-        <input class="form-control public-key-input" type="text" v-model="paymentBasePublicKey" placeholder="Insert payment base public key" />
       </div>
     </div>
     <div class="input-group form-group">
