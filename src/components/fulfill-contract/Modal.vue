@@ -6,7 +6,7 @@
         <div class="modal-header">
           <slot name="header">
             <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-            <h4 class="modal-title">Invoice</h4>
+            <h4 class="modal-title">Receipt</h4>
           </slot>
         </div>
         <div class="modal-body">
@@ -22,10 +22,9 @@
         </div>
         <div class="modal-footer">
           <slot name="footer">
-            <a :href="invoiceFileData" :download="invoiceFileName">
-                <button type="button" class="btn btn-primary">Export</button>
+            <a :href="receiptFileData" :download="receiptFileName">
+                <button type="button" class="btn btn-md btn-primary"><span class="fa fa-download"></span> Save Receipt</button>
               </a>
-            <button type="button" class="btn btn-primary" @click="close">Close</button>
           </slot>
         </div>
       </div>
@@ -55,17 +54,17 @@ export default {
     store: function () {
       return this.$parent.$store
     },
-    invoiceData: function () {
-      return this.store.getters.invoiceData
+    receiptData: function () {
+      return this.store.getters.receiptData
     },
     address: function () {
-      return this.invoiceData.address
+      return this.receiptData.address
     },
-    invoiceFileName: function () {
-      return this.invoiceData.invoiceFileName
+    receiptFileName: function () {
+      return this.receiptData.receiptFileName
     },
-    invoiceFileData: function () {
-      return this.invoiceData.invoiceFileData
+    receiptFileData: function () {
+      return this.receiptData.receiptFileData
     }
   }
 }

@@ -9,6 +9,8 @@ import _ from 'lodash'
 // TODO: extract to pay-to-contract-lib m / purpose' / coin_type' / contract_id' / subcontract_ids
 const ADDRESS_BIP200_MAINNET_PREFIX = "m/200'/0'"
 const ADDRESS_BIP200_TESTNET_PREFIX = "m/200'/1'"
+// All BIP44 compliant wallets start with 0/0 addresses
+const ADDRESS_BIP44_SUFFIX = '0/0'
 
 Vue.use(Vuex)
 
@@ -18,7 +20,7 @@ function initialState () {
     network: null,
     invoiceRequestData: {},
     invoiceData: {},
-    redeemContractData: {}
+    receiptPrivateData: {}
   }
 }
 
@@ -60,15 +62,15 @@ const mutations = {
     console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = contractIdHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
-    const invoiceSellerFileName = 'invoice-seller.json'
-    const invoiceSellerFileData = generateFileData({
+    const invoicePrivateFileName = 'invoice-private.json'
+    const invoicePrivateFileData = generateFileData({
       contract_id: contractId,
       contract_hash: contractHash,
       contract_id_public_key: contractIdPublicKey,
       payment_base_public_key: paymentBasePublicKey
     })
-    const invoiceBuyerFileName = 'invoice-buyer.json'
-    const invoiceBuyerFileData = generateFileData({
+    const invoicePublicFileName = 'invoice-public.json'
+    const invoicePublicFileData = generateFileData({
       contract_id_public_key: contractIdPublicKey,
       payment_base_public_key: paymentBasePublicKey
     })
@@ -77,10 +79,10 @@ const mutations = {
       contractHash,
       contractIdPublicKey,
       paymentBasePublicKey,
-      invoiceSellerFileData,
-      invoiceSellerFileName,
-      invoiceBuyerFileData,
-      invoiceBuyerFileName
+      invoicePrivateFileData,
+      invoicePrivateFileName,
+      invoicePublicFileData,
+      invoicePublicFileName
     }
   },
   CLEAR_CREATE_CONTRACT_MODAL_DATA (state) {
@@ -89,23 +91,23 @@ const mutations = {
   GENERATE_FULFILL_CONTRACT_MODAL_DATA (state, metaData) {
     const { signedContractHash, paymentBasePublicKey } = metaData
     const paymentBaseHDPublicKey = new HDPublicKey(paymentBasePublicKey)
-    const paymentAddressPath = `m/${derivePath(signedContractHash)}/0/0`
+    const paymentAddressPath = `m/${derivePath(signedContractHash)}/${ADDRESS_BIP44_SUFFIX}`
     const address = paymentBaseHDPublicKey.derive(paymentAddressPath)
       .publicKey
       .toAddress()
       .toString()
-    const invoiceFileName = 'invoice.json'
-    const invoiceFileData = generateFileData({
+    const receiptFileName = 'receipt.json'
+    const receiptFileData = generateFileData({
       address
     })
-    state.invoiceData = {
+    state.receiptData = {
       address,
-      invoiceFileName,
-      invoiceFileData
+      receiptFileName,
+      receiptFileData
     }
   },
   CLEAR_FULFILL_CONTRACT_MODAL_DATA (state) {
-    state.invoiceData = {}
+    state.receiptData = {}
   },
   GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { contractId, contractTemplateHash, signedContractHash } = metaData
@@ -114,14 +116,14 @@ const mutations = {
     console.log('paymentBaseRelativePathPath: ' + paymentBaseRelativePathPath)
     const paymentAddressRelativePath = derivePath(signedContractHash)
     console.log('paymentAddressRelativePath: ' + paymentAddressRelativePath)
-    const paymentAddressAbsolutePath = `${getAddressPrefix()}/${contractId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}/0/0`
+    const paymentAddressAbsolutePath = `${getAddressPrefix()}/${contractId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).toString()
-    const fileName = 'invoice-prv.json'
+    const fileName = 'receipt-private.json'
     const fileData = generateFileData({
       payment_address_path: paymentAddressAbsolutePath,
       payment_address_private_key: paymentAddressPrivateKey
     })
-    state.redeemContractData = {
+    state.receiptPrivateData = {
       paymentAddressAbsolutePath,
       paymentAddressPrivateKey,
       fileName,
@@ -129,7 +131,7 @@ const mutations = {
     }
   },
   CLEAR_REDEEM_CONTRACT_MODAL_DATA (state) {
-    state.redeemContractData = {}
+    state.receiptPrivateData = {}
   },
   RESET (state) {
     const initial = initialState()
@@ -143,8 +145,8 @@ const getters = {
   privateKey: (state) => state.privateKey,
   network: (state) => state.network,
   invoiceRequestData: (state) => state.invoiceRequestData,
-  invoiceData: (state) => state.invoiceData,
-  redeemContractData: (state) => state.redeemContractData
+  receiptData: (state) => state.receiptData,
+  receiptPrivateData: (state) => state.receiptPrivateData
 }
 
 export default new Vuex.Store({

@@ -7,7 +7,7 @@
           <div class="modal-header">
             <slot name="header">
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-              <h4 class="modal-title">Redeem Invoice</h4>
+              <h4 class="modal-title">Redeem Receipt</h4>
             </slot>
           </div>
 
@@ -15,7 +15,7 @@
             <slot name="body">
               <div class="form-group">
                 <label>Payment Address - BIP32 Derivation Path</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="paymentAddressAbsolutePath" />
+                <textarea class="form-control" readonly="readonly" v-model="paymentAddressAbsolutePath" rows="5"/>
               </div>
             </slot>
           </div>
@@ -23,9 +23,8 @@
           <div class="modal-footer">
             <slot name="footer">
               <a :href="fileData" :download="fileName">
-                <button type="button" class="btn btn-primary">Export</button>
+                <button type="button" class="btn btn-primary"><span class="fa fa-download"></span> Save Receipt (Private)</button>
               </a>
-              <button type="button" class="btn btn-primary" @click="close">Close</button>
             </slot>
           </div>
 
@@ -50,20 +49,20 @@ export default {
     store: function () {
       return this.$parent.$store
     },
-    redeemContractData: function () {
-      return this.store.getters.redeemContractData
+    receiptPrivateData: function () {
+      return this.store.getters.receiptPrivateData
     },
     paymentAddressPrivateKey: function () {
-      return this.redeemContractData.paymentAddressPrivateKey
+      return this.receiptPrivateData.paymentAddressPrivateKey
     },
     paymentAddressAbsolutePath: function () {
-      return this.redeemContractData.paymentAddressAbsolutePath
+      return this.receiptPrivateData.paymentAddressAbsolutePath
     },
     fileName: function () {
-      return this.redeemContractData.fileName
+      return this.receiptPrivateData.fileName
     },
     fileData: function () {
-      return this.redeemContractData.fileData
+      return this.receiptPrivateData.fileData
     }
   }
 }
@@ -89,7 +88,7 @@ export default {
 
 .modal-container {
   width: 800px;
-  height: 350px;
+  height: 370px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -132,5 +131,9 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+textarea {
+  resize: none;
 }
 </style>

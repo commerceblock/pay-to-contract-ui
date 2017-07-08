@@ -1,5 +1,5 @@
 <template>
-<transition name="modal">
+<modal name="modal">
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container">
@@ -7,7 +7,7 @@
           <div class="modal-header">
             <slot name="header">
               <button type="button" class="close" data-dismiss="modal" @click="close">&times;</button>
-              <h4 class="modal-title">Invoice Request</h4>
+              <h4 class="modal-title">Invoice</h4>
             </slot>
           </div>
 
@@ -18,36 +18,27 @@
                 <input class="form-control" readonly="readonly" type="text" v-model="contractId" />
               </div>
               <div class="form-group">
-                <label>Contract Hash</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="contractHash" />
-              </div>
-              <div class="form-group">
-                <label>Contract Id - Public Key</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="contractIdPublicKey" />
-              </div>
-              <div class="form-group">
-                <label>Payment Base - Public Key</label>
-                <input class="form-control" readonly="readonly" type="text" v-model="paymentBasePublicKey" />
+                <label>Contract Signature</label>
+                <textarea class="form-control" readonly="readonly" v-model="contractHash" rows="2"/>
               </div>
             </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              <a :href="invoiceSellerFileData" :download="invoiceSellerFileName">
-                <button type="button" class="btn btn-primary">Export Seller Data</button>
+              <a :href="invoicePrivateFileData" :download="invoicePrivateFileName">
+                <button type="button" class="btn btn-md btn-primary"><span class="fa fa-download"></span> Save Invoice (Private)</button>
               </a>
-              <a :href="invoiceBuyerFileData" :download="invoiceBuyerFileName">
-                <button type="button" class="btn btn-primary">Export Buyer Data</button>
+              <a :href="invoicePublicFileData" :download="invoicePublicFileName">
+                <button type="button" class="btn btn-md btn-primary"><span class="fa fa-download"></span> Save Invoice (Public)</button>
               </a>
-              <button type="button" class="btn btn-primary" @click="close">Close</button>
             </slot>
           </div>
 
       </div>
     </div>
   </div>
-</transition>
+</modal>
 </template>
 
 <script>
@@ -79,17 +70,17 @@ export default {
     paymentBasePublicKey: function () {
       return this.invoiceRequestData.paymentBasePublicKey
     },
-    invoiceSellerFileData: function () {
-      return this.invoiceRequestData.invoiceSellerFileData
+    invoicePrivateFileData: function () {
+      return this.invoiceRequestData.invoicePrivateFileData
     },
-    invoiceSellerFileName: function () {
-      return this.invoiceRequestData.invoiceSellerFileName
+    invoicePrivateFileName: function () {
+      return this.invoiceRequestData.invoicePrivateFileName
     },
-    invoiceBuyerFileData: function () {
-      return this.invoiceRequestData.invoiceBuyerFileData
+    invoicePublicFileData: function () {
+      return this.invoiceRequestData.invoicePublicFileData
     },
-    invoiceBuyerFileName: function () {
-      return this.invoiceRequestData.invoiceBuyerFileName
+    invoicePublicFileName: function () {
+      return this.invoiceRequestData.invoicePublicFileName
     }
   }
 }
@@ -116,7 +107,7 @@ export default {
 
 .modal-container {
   width: 800px;
-  height: 510px;
+  height: 410px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -163,5 +154,9 @@ export default {
 
 .qr-container {
   margin: 10px 10px 0px 0px
+}
+
+textarea {
+  resize: none;
 }
 </style>
