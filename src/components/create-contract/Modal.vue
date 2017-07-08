@@ -1,8 +1,8 @@
 <template>
-<modal name="modal">
-  <div class="modal-mask">
+<transition name="modal">
+  <div class="modal-mask" @click="close">
     <div class="modal-wrapper">
-      <div class="modal-container">
+      <div class="modal-container" @click.stop>
 
           <div class="modal-header">
             <slot name="header">
@@ -38,7 +38,7 @@
       </div>
     </div>
   </div>
-</modal>
+</transition>
 </template>
 
 <script>
@@ -150,10 +150,6 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-
-.qr-container {
-  margin: 10px 10px 0px 0px
 }
 
 textarea {
