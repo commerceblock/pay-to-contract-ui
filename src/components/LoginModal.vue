@@ -20,7 +20,7 @@
               <p>Welcome! Please keep your seed safe. <a href="https://iancoleman.github.io/bip39/" target="_blank">Generate sample seeds</a></p>
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                <textarea class="form-control span6 prvKey" rows="3" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" type="textarea" v-model="privateKeySeed" />
+                <textarea class="form-control span6 prvKey" name="privateKeySeed" placeholder="Enter your 12/24 seed phrase" v-model="privateKeySeed" rows="3" />
               </div>
               <div class="input-group">
                 <div class="text-center">
@@ -172,5 +172,9 @@ export default {
 
 .input-group input {
   height: 4em;
+}
+
+textarea {
+  resize: none;
 }
 </style>
