@@ -4341,7 +4341,7 @@ path-type@^1.0.0:
 
 "pay-to-contract-lib@git://github.com/commerceblock/pay-to-contract-lib.git":
   version "0.1.0"
-  resolved "git://github.com/commerceblock/pay-to-contract-lib.git#16cb5810254254a35e30d2db2bc751c6c21038a6"
+  resolved "git://github.com/commerceblock/pay-to-contract-lib.git#59b32ef2bbecc701553bec8aa97c15807c35924f"
   dependencies:
     lodash "^4.17.4"
 
