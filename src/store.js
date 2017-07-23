@@ -7,8 +7,9 @@ import { generateFileData } from './helpers'
 import _ from 'lodash'
 
 // TODO: extract to pay-to-contract-lib m / purpose' / coin_type' / contract_id' / subcontract_ids
-const ADDRESS_BIP200_MAINNET_PREFIX = "m/200'/0'"
-const ADDRESS_BIP200_TESTNET_PREFIX = "m/200'/1'"
+const PURPOSE = 200
+const COIN_TYPE_BITCOIN_MAINNET = 0
+const COIN_TYPE_BITCOIN_TESTNET = 1
 // All BIP44 compliant wallets start with 0/0 addresses
 const ADDRESS_BIP44_SUFFIX = '0/0'
 
@@ -26,11 +27,15 @@ function initialState () {
 
 const state = initialState()
 
+const constrcutAddressPrefixPath = function (purpose, coinType) {
+  return `m/${purpose}/${coinType}`
+}
+
 const getAddressPrefix = () => {
   if (state.network.name === 'mainnet' || state.network.alias === 'mainnet') {
-    return ADDRESS_BIP200_MAINNET_PREFIX
+    return constrcutAddressPrefixPath(PURPOSE, COIN_TYPE_BITCOIN_MAINNET)
   } else if (state.network.name === 'testnet') {
-    return ADDRESS_BIP200_TESTNET_PREFIX
+    return constrcutAddressPrefixPath(PURPOSE, COIN_TYPE_BITCOIN_TESTNET)
   } else {
     throw new Error('Unsupported network ' + state.network)
   }
@@ -56,10 +61,8 @@ const mutations = {
     const contractIdHDPublicKey = state.privateKey
       .derive(contractIdPath)
       .hdPublicKey
-    console.log('contractIdPath: ' + contractIdPath)
     const contractIdPublicKey = contractIdHDPublicKey.toString()
     const paymentBasePath = 'm/' + derivePath(contractHash)
-    console.log('paymentBasePath: ' + paymentBasePath)
     const paymentBaseHDPublicKey = contractIdHDPublicKey.derive(paymentBasePath)
     const paymentBasePublicKey = paymentBaseHDPublicKey.toString()
     const invoicePrivateFileName = 'invoice-private.json'
@@ -111,17 +114,20 @@ const mutations = {
   },
   GENERATE_REDEEM_CONTRACT_MODAL_DATA (state, metaData) {
     const { contractId, contractTemplateHash, signedContractHash } = metaData
-    console.log('contractId: ' + contractId)
     const paymentBaseRelativePathPath = derivePath(contractTemplateHash)
-    console.log('paymentBaseRelativePathPath: ' + paymentBaseRelativePathPath)
     const paymentAddressRelativePath = derivePath(signedContractHash)
-    console.log('paymentAddressRelativePath: ' + paymentAddressRelativePath)
     const paymentAddressAbsolutePath = `${getAddressPrefix()}/${contractId}'/${paymentBaseRelativePathPath}/${paymentAddressRelativePath}`
     const paymentAddressPrivateKey = state.privateKey.derive(paymentAddressAbsolutePath).toString()
+    const address = state.privateKey.derive(paymentAddressAbsolutePath)
+      .derive(`m/${ADDRESS_BIP44_SUFFIX}`)
+      .publicKey
+      .toAddress()
+      .toString()
     const fileName = 'receipt-private.json'
     const fileData = generateFileData({
       payment_address_path: paymentAddressAbsolutePath,
-      payment_address_private_key: paymentAddressPrivateKey
+      payment_address_private_key: paymentAddressPrivateKey,
+      payment_address: address
     })
     state.receiptPrivateData = {
       paymentAddressAbsolutePath,

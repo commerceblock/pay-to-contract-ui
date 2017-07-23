@@ -82,7 +82,9 @@ export default {
       updateFileHashes(file, this.contractFileHashes)
     },
     contractFileRemoved: function (file, error, xhr) {
-      delete this.contractFileHashes[file.name]
+      if (this.contractFileHashes) {
+        delete this.contractFileHashes[file.name]
+      }
     },
     closeInvoiceModal: function () {
       this.showModal = false
