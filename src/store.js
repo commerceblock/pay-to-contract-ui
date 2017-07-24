@@ -28,7 +28,7 @@ function initialState () {
 const state = initialState()
 
 const constrcutAddressPrefixPath = function (purpose, coinType) {
-  return `m/${purpose}/${coinType}`
+  return `m/${purpose}'/${coinType}'`
 }
 
 const getAddressPrefix = () => {
